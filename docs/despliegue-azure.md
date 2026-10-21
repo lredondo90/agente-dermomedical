@@ -22,8 +22,10 @@ tras un rato sin uso tarda unos segundos. Para datos permanentes, añade `DATABA
 3. En [Azure Cloud Shell](https://shell.azure.com) (Bash), con el repositorio clonado:
 
    ```bash
-   GHCR_TOKEN=<token> BUDGET_EMAIL=<tu correo> ADMIN_PASSWORD=<contraseña del panel> ./infra/azure-demo.sh
+   GHCR_TOKEN="ghp_tu_token" BUDGET_EMAIL="tu@correo.com" ADMIN_PASSWORD="una_contraseña" ./infra/azure-demo.sh
    ```
+
+   Pon los valores entre comillas y sin los símbolos < >, que Bash interpreta como ficheros.
 
    Al terminar imprime la dirección pública.
 

@@ -3,7 +3,7 @@
 # Requisitos: Azure CLI con sesión iniciada (Azure Cloud Shell sirve) y un token de GitHub con permiso
 # read:packages para descargar la imagen de ghcr.io.
 #
-# Uso: GHCR_TOKEN=<token> BUDGET_EMAIL=<tu correo> ADMIN_PASSWORD=<contraseña del panel> ./infra/azure-demo.sh
+# Uso: GHCR_TOKEN="ghp_tu_token" BUDGET_EMAIL="tu@correo.com" ADMIN_PASSWORD="una_contraseña" ./infra/azure-demo.sh
 set -euo pipefail
 
 RG="${RG:-agente-dermomedical-demo}"
