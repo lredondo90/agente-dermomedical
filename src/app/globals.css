@@ -44,6 +44,7 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
   letter-spacing: -0.02em;
+  overflow-x: clip;
 }
 
 h1,
@@ -73,6 +74,11 @@ h3 {
   }
   .tile {
     @apply bg-fog p-8;
+  }
+  /* Sección a todo el ancho de la ventana dentro del contenedor centrado. */
+  .bleed {
+    margin-inline: calc(50% - 50vw);
+    padding-inline: calc(50vw - 50%);
   }
   .eyebrow {
     @apply text-xs font-semibold text-tier;

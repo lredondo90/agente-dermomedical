@@ -4,6 +4,12 @@ name: Fotos de producto
 
 on:
   push:
+    branches: [main]
+    paths:
+      - "data/catalogos/**"
+      - "scripts/descargar-imagenes.mjs"
+      - ".github/workflows/imagenes.yml"
+  pull_request:
     paths:
       - "data/catalogos/**"
       - "scripts/descargar-imagenes.mjs"
@@ -18,6 +24,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # En una PR, trabajar sobre su rama para poder guardar las fotos en ella.
+          ref: ${{ github.head_ref || github.ref_name }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22
