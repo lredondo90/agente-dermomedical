@@ -1,86 +1,151 @@
 @import "tailwindcss";
 
-/* Estilo visual basado en DESIGN.md (lenguaje de diseño tipo DJI):
-   lienzo blanco, tinta casi negra, un único azul de acción y botones píldora. */
+/* Sistema visual de la APP: lienzo cálido, tinta casi negra, un verde clínico como acento,
+   titulares editoriales en serif (Instrument Serif) y texto en Geist. Tarjetas redondeadas con sombra suave. */
 :root {
-  --background: #ffffff;
-  --foreground: #262626;
-  --muted: #595959;
-  --subtle: #8c8c8c;
-  --line: #e8e8e8;
-  --card-border: #d9d9d9;
-  --accent: #0070d5;
-  --accent-soft: #deeafd;
-  --soft: #f7f9fa;
-  --fog: #f5f5f5;
-  --announce: #fafafa;
-  --tier: #be4e04;
-  --footer: #272727;
-  --footer-line: #414141;
-  --footer-link: #b3b3b3;
+  --background: #f7f6f3;
+  --surface: #ffffff;
+  --foreground: #14161a;
+  --muted: #5b6170;
+  --subtle: #8a8f99;
+  --line: #ebe8e2;
+  --card-border: #e4e1da;
+  --accent: #0f6b5c;
+  --accent-strong: #0b5347;
+  --accent-soft: #e2f0ec;
+  --soft: #f1efea;
+  --fog: #ecebe6;
+  --warn: #9a5b0b;
+  --warn-soft: #fdf3e2;
+  --danger: #b4232c;
+  --footer: #101214;
+  --footer-line: #25282c;
+  --footer-link: #9aa0a8;
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-surface: var(--surface);
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-subtle: var(--subtle);
   --color-line: var(--line);
   --color-card-border: var(--card-border);
   --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
   --color-accent-soft: var(--accent-soft);
   --color-soft: var(--soft);
   --color-fog: var(--fog);
-  --color-announce: var(--announce);
-  --color-tier: var(--tier);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-danger: var(--danger);
   --color-footer: var(--footer);
   --color-footer-line: var(--footer-line);
   --color-footer-link: var(--footer-link);
-  --font-sans: var(--font-open-sans), "Open Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: var(--font-serif), ui-serif, Georgia, serif;
+  --shadow-card: 0 1px 2px rgb(20 22 26 / 0.04), 0 8px 24px -12px rgb(20 22 26 / 0.1);
+  --shadow-lift: 0 2px 4px rgb(20 22 26 / 0.04), 0 18px 40px -16px rgb(20 22 26 / 0.18);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
-  letter-spacing: -0.02em;
+  font-feature-settings: "ss01", "cv11";
   overflow-x: clip;
 }
 
 h1,
 h2,
 h3 {
-  letter-spacing: -0.03em;
+  letter-spacing: -0.025em;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: var(--accent);
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+::selection {
+  background: var(--accent-soft);
 }
 
 @layer components {
   .btn {
-    @apply inline-flex h-10 items-center justify-center whitespace-nowrap rounded-full bg-accent px-5 text-sm text-white transition-opacity hover:opacity-90 disabled:opacity-40;
+    @apply inline-flex h-10 items-center justify-center gap-2 rounded-full bg-foreground px-5 text-sm font-medium whitespace-nowrap text-white shadow-[0_1px_2px_rgb(0_0_0/0.12),inset_0_1px_0_rgb(255_255_255/0.08)] transition hover:bg-[#2a2d33] active:scale-[0.98] disabled:pointer-events-none disabled:opacity-40;
+  }
+  .btn-accent {
+    @apply inline-flex h-10 items-center justify-center gap-2 rounded-full bg-accent px-5 text-sm font-medium whitespace-nowrap text-white transition hover:bg-accent-strong active:scale-[0.98] disabled:opacity-40;
   }
   .btn-ghost {
-    @apply inline-flex h-10 items-center justify-center whitespace-nowrap rounded-full border border-foreground px-5 text-sm text-foreground transition-colors hover:bg-fog;
+    @apply inline-flex h-10 items-center justify-center gap-2 rounded-full border border-card-border bg-surface px-5 text-sm font-medium whitespace-nowrap text-foreground transition hover:border-[#cfcbc2] hover:bg-soft active:scale-[0.98] disabled:opacity-40;
   }
   .btn-soft {
-    @apply inline-flex h-10 items-center justify-center whitespace-nowrap rounded-full bg-accent-soft px-5 text-sm text-accent transition-opacity hover:opacity-80;
+    @apply inline-flex h-10 items-center justify-center gap-2 rounded-full bg-accent-soft px-5 text-sm font-medium whitespace-nowrap text-accent-strong transition hover:bg-[#d3e8e1] active:scale-[0.98] disabled:opacity-40;
   }
   .input {
-    @apply w-full rounded-lg border border-card-border bg-white px-3 py-2 text-sm focus:border-accent focus:outline-none;
+    @apply w-full rounded-xl border border-card-border bg-surface px-3.5 py-2.5 text-sm shadow-[inset_0_1px_2px_rgb(20_22_26/0.04)] transition outline-none placeholder:text-subtle focus:border-accent focus:ring-4 focus:ring-accent/15;
   }
   .label {
-    @apply mb-1 block text-sm font-semibold;
+    @apply mb-1.5 block text-[13px] font-medium text-foreground;
   }
   .card {
-    @apply rounded-lg border border-card-border bg-white p-6;
+    @apply rounded-2xl border border-card-border bg-surface p-6 shadow-card;
   }
   .tile {
-    @apply bg-fog p-8;
-  }
-  /* Sección a todo el ancho de la ventana dentro del contenedor centrado. */
-  .bleed {
-    margin-inline: calc(50% - 50vw);
-    padding-inline: calc(50vw - 50%);
+    @apply rounded-2xl bg-soft p-8;
   }
   .eyebrow {
-    @apply text-xs font-semibold text-tier;
+    @apply text-[11px] font-semibold tracking-[0.14em] text-accent uppercase;
   }
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium whitespace-nowrap;
+  }
+  .display {
+    @apply font-display font-normal tracking-[-0.02em];
+  }
+  .page-title {
+    @apply text-2xl font-semibold tracking-tight sm:text-[28px];
+  }
+  .section-title {
+    @apply text-base font-semibold tracking-tight;
+  }
+  .link {
+    @apply font-medium text-accent underline-offset-4 hover:underline;
+  }
+  /* Tablas del panel: cabecera discreta, filas con separación y hover. */
+  .table {
+    @apply w-full text-sm;
+  }
+  .table th {
+    @apply bg-soft px-3 py-2.5 text-left text-xs font-medium whitespace-nowrap text-subtle;
+  }
+  .table th:first-child {
+    @apply rounded-l-lg;
+  }
+  .table th:last-child {
+    @apply rounded-r-lg;
+  }
+  .table td {
+    @apply border-b border-line px-3 py-3 align-middle;
+  }
+  .table tbody tr:last-child td {
+    @apply border-b-0;
+  }
+  .table tbody tr {
+    @apply transition-colors hover:bg-soft/60;
+  }
+}
+
+/* Desplegables con la misma forma que los campos de texto y una flecha propia. */
+select.input {
+  appearance: none;
+  padding-right: 2.25rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238a8f99' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
 }

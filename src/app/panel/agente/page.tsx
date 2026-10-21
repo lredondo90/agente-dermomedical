@@ -6,8 +6,8 @@ import { inBusinessHours } from "@/lib/agent/followup";
 import { prospectStats } from "@/lib/agent/prospects";
 import { AGENT_MODEL } from "@/lib/agent/brain";
 import { runTickNow, saveAgent } from "./actions";
-import { PanelNav } from "../PanelNav";
 import { Flash } from "./Flash";
+import { PageHeader, Stat } from "../PageHeader";
 
 export const dynamic = "force-dynamic";
 
@@ -47,21 +47,30 @@ export default async function AgentePage({ searchParams }: { searchParams: Promi
   ] as const;
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-3xl font-semibold">Agente</h1>
-      <PanelNav />
+    <div className="space-y-8">
+      <PageHeader eyebrow="Agente de IA" title="Agente comercial">
+        Responde a los clientes por correo y WhatsApp, hace el seguimiento de las muestras y recuerda la reposición.
+      </PageHeader>
       <Flash msg={msg} />
 
-      <div className="grid gap-4 sm:grid-cols-4">
-        <Stat label="Estado" value={settings.paused ? "En pausa" : "Activo"} />
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <Stat
+          label="Estado"
+          value={
+            <span className="inline-flex items-center gap-2">
+              <span className={`size-2.5 rounded-full ${settings.paused ? "bg-warn" : "bg-accent shadow-[0_0_0_4px_rgb(15_107_92/0.15)]"}`} />
+              {settings.paused ? "En pausa" : "Activo"}
+            </span>
+          }
+        />
         <Stat label="Mensajes enviados hoy" value={`${c.sent_today} / ${settings.dailyLimit}`} />
         <Stat label="Mensajes recibidos (7 días)" value={String(c.inbound_week)} />
         <Stat label="Clínicas: carta enviada / registradas" value={`${prospects["carta-enviada"] ?? 0} / ${prospects["registrado"] ?? 0}`} />
       </div>
 
       {pending.length > 0 && (
-        <section className="card space-y-3">
-          <h2 className="text-lg font-semibold">Necesitan a una persona ({pending.length})</h2>
+        <section className="card space-y-3 border-warn/25 bg-[linear-gradient(180deg,var(--warn-soft),var(--surface)_60%)]">
+          <h2 className="section-title flex items-center gap-2"><span className="chip bg-warn text-white">{pending.length}</span> Necesitan a una persona</h2>
           <ul className="divide-y divide-line text-sm">
             {pending.map((p) => (
               <li key={p.id} className="flex flex-wrap items-center justify-between gap-2 py-2">
@@ -74,24 +83,24 @@ export default async function AgentePage({ searchParams }: { searchParams: Promi
       )}
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <form action={saveAgent} className="card space-y-4 text-sm">
-          <h2 className="text-lg font-semibold">Reglas</h2>
-          <label className="flex items-center gap-2"><input type="checkbox" name="paused" defaultChecked={settings.paused} /> Pausar el agente (no escribe ni responde solo)</label>
-          <label className="flex items-center gap-2"><input type="checkbox" name="autoReply" defaultChecked={settings.autoReply} /> Responder solo a los clientes con IA</label>
+        <form action={saveAgent} className="card space-y-5 text-sm">
+          <h2 className="section-title">Reglas</h2>
+          <label className="flex items-center gap-2.5 rounded-xl bg-soft px-3 py-2.5"><input type="checkbox" name="paused" defaultChecked={settings.paused} /> Pausar el agente (no escribe ni responde solo)</label>
+          <label className="flex items-center gap-2.5 rounded-xl bg-soft px-3 py-2.5"><input type="checkbox" name="autoReply" defaultChecked={settings.autoReply} /> Responder solo a los clientes con IA</label>
           <div className="flex flex-wrap items-center gap-2">
-            Máximo <input name="dailyLimit" type="number" min={1} defaultValue={settings.dailyLimit} className="input w-20" /> seguimientos al día
+            Máximo <input name="dailyLimit" type="number" min={1} defaultValue={settings.dailyLimit} className="input h-9 w-20 py-0 text-center" /> seguimientos al día
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            Seguimiento de la muestra a los <input name="d1" type="number" min={1} defaultValue={settings.sampleFollowupDays[0]} className="input w-16" /> y
-            <input name="d2" type="number" min={2} defaultValue={settings.sampleFollowupDays[1]} className="input w-16" /> días
+            Seguimiento de la muestra a los <input name="d1" type="number" min={1} defaultValue={settings.sampleFollowupDays[0]} className="input h-9 w-16 py-0 text-center" /> y
+            <input name="d2" type="number" min={2} defaultValue={settings.sampleFollowupDays[1]} className="input h-9 w-16 py-0 text-center" /> días
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            Recordar reposición a los <input name="reorderDays" type="number" min={7} defaultValue={settings.reorderDays} className="input w-16" /> días del último pedido
+            Recordar reposición a los <input name="reorderDays" type="number" min={7} defaultValue={settings.reorderDays} className="input h-9 w-16 py-0 text-center" /> días del último pedido
           </div>
           <div>
             <label className="label">Frases prohibidas (una por línea)</label>
             <textarea name="forbidden" rows={4} defaultValue={settings.forbidden.join("\n")} className="input" />
-            <p className="mt-1 text-muted">Si la respuesta de la IA contiene alguna, no se envía y pasa a una persona.</p>
+            <p className="mt-1.5 text-xs text-subtle">Si la respuesta de la IA contiene alguna, no se envía y pasa a una persona.</p>
           </div>
           <div>
             <label className="label">Indicaciones para el agente</label>
@@ -101,20 +110,23 @@ export default async function AgentePage({ searchParams }: { searchParams: Promi
         </form>
 
         <div className="space-y-6">
-          <section className="card space-y-3 text-sm">
-            <h2 className="text-lg font-semibold">Conexiones</h2>
-            <ul className="space-y-1">
+          <section className="card space-y-4 text-sm">
+            <h2 className="section-title">Conexiones</h2>
+            <ul className="divide-y divide-line">
               {services.map(([name, ok, env]) => (
-                <li key={name} className="flex justify-between gap-2">
-                  <span>{name}</span>
-                  <span className={ok ? "text-accent" : "text-muted"}>{ok ? "Conectado" : `Falta ${env}`}</span>
+                <li key={name} className="flex items-center justify-between gap-2 py-2.5">
+                  <span className="flex items-center gap-2.5">
+                    <span className={`size-2 rounded-full ${ok ? "bg-accent" : "bg-[#d4d0c8]"}`} />
+                    {name}
+                  </span>
+                  {ok ? <span className="chip bg-accent-soft text-accent-strong">Conectado</span> : <span className="font-mono text-[11px] text-subtle">Falta {env}</span>}
                 </li>
               ))}
             </ul>
-            <p className="text-muted">Modelo: {AGENT_MODEL}. Sin una conexión, los mensajes se guardan aquí como «sin enviar» y nada sale fuera.</p>
+            <p className="text-xs text-subtle">Modelo: {AGENT_MODEL}. Sin una conexión, los mensajes se guardan aquí como «sin enviar» y nada sale fuera.</p>
           </section>
           <form action={runTickNow} className="card space-y-3 text-sm">
-            <h2 className="text-lg font-semibold">Seguimiento automático</h2>
+            <h2 className="section-title">Seguimiento automático</h2>
             <p className="text-muted">
               Escribe solo a clientes que dieron su consentimiento, en laborables de 9 a 20 h: a los {settings.sampleFollowupDays[0]} y {settings.sampleFollowupDays[1]} días de
               la muestra si no han pedido, y a los {settings.reorderDays} días del último pedido. Nunca repite un mensaje.
@@ -125,31 +137,22 @@ export default async function AgentePage({ searchParams }: { searchParams: Promi
         </div>
       </div>
 
-      <section className="space-y-2">
-        <h2 className="text-lg font-semibold">Últimos mensajes</h2>
+      <section className="card space-y-3">
+        <h2 className="section-title">Últimos mensajes</h2>
         {recent.length === 0 ? (
-          <p className="text-sm text-muted">Todavía no hay conversaciones. Puedes probar el agente desde la ficha de un cliente: <Link className="underline" href="/panel/clientes">Clientes</Link>.</p>
+          <p className="text-sm text-muted">Todavía no hay conversaciones. Puedes probar el agente desde la ficha de un cliente: <Link className="link" href="/panel/clientes">Clientes</Link>.</p>
         ) : (
           <ul className="divide-y divide-line text-sm">
             {recent.map((m, i) => (
-              <li key={i} className="py-2">
-                <Link href={`/panel/agente/conversacion/${m.customer_id}`} className="font-medium hover:underline">{m.clinic}</Link>
-                <span className="text-muted"> · {m.channel} · {m.direction === "entrada" ? "del cliente" : m.author === "agente" ? "del agente" : "de una persona"}{m.status !== "ok" ? ` · ${m.status}` : ""} · {new Date(m.created_at).toLocaleString("es-ES")}</span>
-                <p className="line-clamp-2 whitespace-pre-line">{m.body}</p>
+              <li key={i} className="-mx-2 rounded-xl px-2 py-3 transition-colors hover:bg-soft/60">
+                <Link href={`/panel/agente/conversacion/${m.customer_id}`} className="font-medium hover:text-accent">{m.clinic}</Link>
+                <span className="text-xs text-subtle"> · {m.channel} · {m.direction === "entrada" ? "del cliente" : m.author === "agente" ? "del agente" : "de una persona"}{m.status !== "ok" ? ` · ${m.status}` : ""} · {new Date(m.created_at).toLocaleString("es-ES")}</span>
+                <p className="mt-0.5 line-clamp-2 whitespace-pre-line text-muted">{m.body}</p>
               </li>
             ))}
           </ul>
         )}
       </section>
-    </div>
-  );
-}
-
-function Stat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="card">
-      <div className="text-xs text-muted">{label}</div>
-      <div className="text-2xl font-semibold">{value}</div>
     </div>
   );
 }

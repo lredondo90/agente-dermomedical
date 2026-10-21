@@ -21,35 +21,35 @@ export default async function CatalogoPage({ searchParams }: { searchParams: Pro
     .filter((l) => l.products.length > 0);
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-12">
       {bienvenida && (
-        <div className="rounded-lg bg-accent-soft p-4 text-sm text-accent">
+        <div className="rounded-2xl border border-accent/15 bg-accent-soft px-5 py-4 text-sm text-accent-strong">
           Ya estás dado de alta. Si pediste la muestra gratuita, la preparamos y te avisamos cuando salga.
         </div>
       )}
       <header className="space-y-3">
         <p className="eyebrow">Catálogo profesional</p>
-        <h1 className="text-4xl leading-[1.08] font-semibold md:text-5xl">{current ? current.name : "Todos los productos"}</h1>
+        <h1 className="display text-5xl leading-[1.02] md:text-6xl">{current ? current.name : "Todos los productos"}</h1>
         <p className="max-w-2xl text-muted">
           {current ? current.focus : "Peelings bioquímicos, cócteles, cremas y tratamientos domiciliarios."}
         </p>
-        <div className="flex flex-wrap gap-x-6 gap-y-1 pt-1 text-sm text-subtle">
-          <span>Precios sin IVA</span>
+        <div className="flex flex-wrap gap-2 pt-2 text-xs">
+          <span className="chip border border-card-border bg-surface text-muted">Precios sin IVA</span>
           {pricing.tiers.map((t) => (
-            <span key={t.pct}>−{t.pct} % desde {euros(t.minCents)}</span>
+            <span key={t.pct} className="chip bg-accent-soft text-accent-strong">−{t.pct} % desde {euros(t.minCents)}</span>
           ))}
-          {pricing.freeShippingFromCents > 0 && <span>Envío gratis desde {euros(pricing.freeShippingFromCents)}</span>}
+          {pricing.freeShippingFromCents > 0 && <span className="chip border border-card-border bg-surface text-muted">Envío gratis desde {euros(pricing.freeShippingFromCents)}</span>}
         </div>
       </header>
 
-      <nav className="sticky top-16 z-10 -mx-4 border-b border-line bg-white/90 px-4 backdrop-blur-md">
-        <div className="flex gap-1 overflow-x-auto py-3 [scrollbar-width:none]">
-          <Link href="/catalogo" className={`shrink-0 ${!linea ? "btn h-8 px-4" : "btn-ghost h-8 border-transparent px-4"}`}>Todas</Link>
+      <nav className="sticky top-[76px] z-20">
+        <div className="flex w-fit max-w-full gap-1 overflow-x-auto rounded-full border border-card-border/80 bg-white/80 p-1 shadow-card backdrop-blur-xl [scrollbar-width:none]">
+          <Link href="/catalogo" className={`shrink-0 ${!linea ? "btn h-8 px-4" : "btn-ghost h-8 border-transparent bg-transparent px-4 shadow-none"}`}>Todas</Link>
           {lines.map((l) => (
             <Link
               key={l.id}
               href={`/catalogo?linea=${l.id}`}
-              className={`shrink-0 ${linea === l.id ? "btn h-8 px-4" : "btn-ghost h-8 border-transparent px-4"}`}
+              className={`shrink-0 ${linea === l.id ? "btn h-8 px-4" : "btn-ghost h-8 border-transparent bg-transparent px-4 shadow-none"}`}
             >
               {l.name}
             </Link>
@@ -58,7 +58,7 @@ export default async function CatalogoPage({ searchParams }: { searchParams: Pro
       </nav>
 
       {!loggedIn && (
-        <div className="flex flex-wrap items-center justify-between gap-4 rounded-lg bg-soft p-5">
+        <div className="card flex flex-wrap items-center justify-between gap-4 p-5">
           <p className="text-sm text-muted">Para hacer pedidos necesitas una cuenta profesional. La muestra gratuita va incluida en el alta.</p>
           <div className="flex gap-2">
             <Link href="/entrar" className="btn-ghost h-9 px-4">Entrar</Link>
@@ -70,14 +70,15 @@ export default async function CatalogoPage({ searchParams }: { searchParams: Pro
       {byLine.map((l) => (
         <section key={l.id} className="space-y-6">
           {!current && (
-            <div className="flex items-baseline justify-between gap-4 border-b border-line pb-3">
-              <h2 className="text-2xl font-semibold">
-                {l.name} <span className="text-base font-normal text-subtle">· {l.focus}</span>
-              </h2>
-              <Link href={`/catalogo?linea=${l.id}`} className="shrink-0 text-sm text-accent hover:underline">Ver línea ›</Link>
+            <div className="flex items-end justify-between gap-4">
+              <div>
+                <h2 className="display text-3xl">{l.name}</h2>
+                <p className="text-sm text-subtle">{l.focus}</p>
+              </div>
+              <Link href={`/catalogo?linea=${l.id}`} className="link shrink-0 text-sm">Ver línea →</Link>
             </div>
           )}
-          <div className="grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4">
             {l.products.map((p) => (
               <ProductCard key={p.id} product={p} canOrder={loggedIn} />
             ))}

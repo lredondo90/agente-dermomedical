@@ -7,9 +7,9 @@ export const dynamic = "force-dynamic";
 export default async function Condiciones() {
   const p = await getPricing();
   return (
-    <article className="mx-auto max-w-2xl space-y-3 text-sm">
-      <h1 className="text-3xl font-semibold">Condiciones de venta profesional</h1>
-      <p className="rounded-lg bg-amber-50 p-3">Borrador pendiente de revisión por un abogado.</p>
+    <article className="card mx-auto max-w-2xl space-y-4 p-8 text-sm leading-relaxed sm:p-10">
+      <h1 className="display text-5xl leading-none">Condiciones de venta profesional</h1>
+      <p className="rounded-xl border border-warn/20 bg-warn-soft px-4 py-3 text-warn">Borrador pendiente de revisión por un abogado.</p>
       <p>Vendedor: {company.name}, {company.taxId}. Venta exclusiva a profesionales sanitarios; no aplica el derecho de desistimiento de consumidores.</p>
       <p>Precios en euros sin IVA. Descuento por volumen: {p.tiers.map((t) => `${t.pct} % desde ${euros(t.minCents)}`).join(", ")} (máximo {MAX_DISCOUNT_PCT} %).</p>
       <p>Envío {euros(p.shippingCents)}, gratuito desde {euros(p.freeShippingFromCents)}. Plazo de entrega: [por definir]. Envíos a Canarias, Ceuta y Melilla sin IVA peninsular; los impuestos de importación corren a cargo del cliente.</p>

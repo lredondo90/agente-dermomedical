@@ -7,7 +7,7 @@ export function AddButton({ productId }: { productId: number }) {
   const [added, setAdded] = useState(false);
   return (
     <button
-      className="btn-soft h-9 px-4"
+      className={`${added ? "btn-accent" : "btn"} h-9 px-4 text-[13px]`}
       onClick={() => {
         addToCart(productId);
         setAdded(true);

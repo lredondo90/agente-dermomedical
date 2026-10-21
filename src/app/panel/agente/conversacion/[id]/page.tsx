@@ -4,7 +4,7 @@ import { requireAdmin } from "@/lib/session";
 import { getCustomer } from "@/lib/store";
 import { listMessages } from "@/lib/agent/channels";
 import { humanReply, resolveHuman, simulateInbound } from "../../actions";
-import { PanelNav } from "../../../PanelNav";
+import { PageHeader } from "../../../PageHeader";
 
 export const dynamic = "force-dynamic";
 
@@ -17,27 +17,39 @@ export default async function ConversacionPage({ params }: { params: Promise<{ i
   const lastChannel = messages.findLast((m) => m.channel !== "panel")?.channel ?? (customer.consent_whatsapp && customer.phone ? "whatsapp" : "email");
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-3xl font-semibold">{customer.clinic}</h1>
-      <PanelNav />
-      <p className="text-sm text-muted">
-        {customer.name} · {customer.email}{customer.phone && ` · ${customer.phone}`} · {customer.province} · Correo: {customer.consent_email ? "sí" : "no"} · WhatsApp: {customer.consent_whatsapp ? "sí" : "no"}
-        {customer.prospect_code && ` · Llegó por carta (${customer.prospect_code})`}
-      </p>
+    <div className="space-y-8">
+      <Link href="/panel/agente" className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-foreground">← Volver al agente</Link>
+      <PageHeader eyebrow="Conversación" title={customer.clinic}>
+        <div className="flex flex-wrap items-center gap-2">
+          <span>{customer.name} · {customer.email}{customer.phone && ` · ${customer.phone}`} · {customer.province}</span>
+          <span className={`chip ${customer.consent_email ? "bg-accent-soft text-accent-strong" : "bg-soft text-subtle"}`}>Correo {customer.consent_email ? "sí" : "no"}</span>
+          <span className={`chip ${customer.consent_whatsapp ? "bg-accent-soft text-accent-strong" : "bg-soft text-subtle"}`}>WhatsApp {customer.consent_whatsapp ? "sí" : "no"}</span>
+          {customer.prospect_code && <span className="chip bg-soft text-muted">Llegó por carta · {customer.prospect_code}</span>}
+        </div>
+      </PageHeader>
 
       {customer.needs_human && (
-        <form action={resolveHuman} className="flex flex-wrap items-center justify-between gap-3 rounded-lg bg-amber-50 px-4 py-3 text-sm text-amber-900">
+        <form action={resolveHuman} className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-warn/20 bg-warn-soft px-5 py-4 text-sm text-warn">
           <input type="hidden" name="customerId" value={customer.id} />
           El agente ha pasado esta conversación a una persona. Respóndele abajo y márcala como resuelta.
-          <button className="btn-ghost">Marcar como resuelta</button>
+          <button className="btn-ghost h-9">Marcar como resuelta</button>
         </form>
       )}
 
-      <section className="space-y-3">
+      <section className="card space-y-4 bg-[linear-gradient(180deg,var(--soft),var(--surface))]">
         {messages.length === 0 && <p className="text-sm text-muted">Sin mensajes todavía.</p>}
         {messages.map((m) => (
-          <div key={m.id} className={`max-w-2xl rounded-lg p-4 text-sm ${m.direction === "entrada" ? "bg-fog" : "ml-auto border border-card-border bg-white"}`}>
-            <div className="mb-1 text-xs text-muted">
+          <div
+            key={m.id}
+            className={`max-w-2xl rounded-2xl px-4 py-3 text-sm shadow-sm ${
+              m.direction === "entrada"
+                ? "rounded-tl-md border border-card-border bg-surface"
+                : m.author === "agente"
+                  ? "ml-auto rounded-tr-md bg-accent text-white"
+                  : "ml-auto rounded-tr-md bg-foreground text-white"
+            }`}
+          >
+            <div className={`mb-1 text-[11px] ${m.direction === "entrada" ? "text-subtle" : "text-white/60"}`}>
               {m.direction === "entrada" ? "Cliente" : m.author === "agente" ? "Agente (IA)" : "Persona del equipo"} · {m.channel}
               {m.status !== "ok" && ` · ${m.status}`} · {new Date(m.created_at).toLocaleString("es-ES")}
             </div>
@@ -49,19 +61,19 @@ export default async function ConversacionPage({ params }: { params: Promise<{ i
 
       <div className="grid gap-6 lg:grid-cols-2">
         <form action={humanReply} className="card space-y-3 text-sm">
-          <h2 className="text-lg font-semibold">Responder como persona</h2>
+          <h2 className="section-title">Responder como persona</h2>
           <input type="hidden" name="customerId" value={customer.id} />
           <select name="channel" defaultValue={lastChannel} className="input">
             <option value="email">Correo</option>
             <option value="whatsapp" disabled={!customer.phone}>WhatsApp</option>
           </select>
           <textarea name="body" rows={4} className="input" placeholder="Tu respuesta" />
-          <label className="flex items-center gap-2"><input type="checkbox" name="resolve" defaultChecked /> Marcar como resuelta</label>
+          <label className="flex items-center gap-2.5"><input type="checkbox" name="resolve" defaultChecked /> Marcar como resuelta</label>
           <button className="btn">Enviar</button>
         </form>
 
-        <form action={simulateInbound} className="card space-y-3 text-sm">
-          <h2 className="text-lg font-semibold">Probar el agente</h2>
+        <form action={simulateInbound} className="card space-y-3 border-dashed text-sm">
+          <h2 className="section-title">Probar el agente</h2>
           <p className="text-muted">Escribe como si fueras este cliente. El agente responde de verdad (y si el correo o WhatsApp están conectados, el cliente recibirá la respuesta).</p>
           <input type="hidden" name="customerId" value={customer.id} />
           <select name="channel" defaultValue={lastChannel} className="input">
@@ -72,7 +84,6 @@ export default async function ConversacionPage({ params }: { params: Promise<{ i
           <button className="btn-ghost">Enviar como cliente</button>
         </form>
       </div>
-      <Link href="/panel/agente" className="text-sm underline">Volver al agente</Link>
     </div>
   );
 }
