@@ -133,6 +133,11 @@ create table if not exists messages (
   created_at timestamptz not null default now()
 );
 
+-- Datos de Google Maps para decidir a qué clínicas merece la pena escribir: nota, nº de opiniones y última opinión.
+alter table prospects add column if not exists rating numeric(2,1);
+alter table prospects add column if not exists rating_count int;
+alter table prospects add column if not exists last_review_at timestamptz;
+
 alter table customers add column if not exists needs_human boolean not null default false;
 alter table customers add column if not exists prospect_code text;
 

@@ -89,3 +89,10 @@ export function parseCsv(text: string): Record<string, string>[] {
   const keys = header.map(norm);
   return body.map((r) => Object.fromEntries(keys.map((k, i) => [k, (r[i] ?? "").trim()])));
 }
+
+// Sin actividad: con ficha de Google pero sin opiniones, o con la última hace más de un año.
+export function isInactive(p: { source: string; rating_count: number | null; last_review_at: string | null }, now = Date.now()) {
+  if (p.source !== "google-maps" || p.rating_count == null) return false;
+  if (p.rating_count === 0 || !p.last_review_at) return true;
+  return now - new Date(p.last_review_at).getTime() > 365 * 24 * 3600 * 1000;
+}

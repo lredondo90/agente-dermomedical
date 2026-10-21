@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { findForbidden, normalizePhone, parseCsv, provinceFromAddress, stripQuoted } from "../src/lib/agent/text";
+import { findForbidden, isInactive, normalizePhone, parseCsv, provinceFromAddress, stripQuoted } from "../src/lib/agent/text";
 
 test("frases prohibidas: palabra completa, sin distinguir mayúsculas", () => {
   assert.equal(findForbidden("Este peeling CURA el acné", ["cura"]), "cura");
@@ -30,4 +30,14 @@ test("CSV con punto y coma, comillas y tildes en la cabecera", () => {
 test("quita el texto citado de un correo de respuesta", () => {
   const text = "¿Tienen stock del 30%?\nGracias\n\nEl mar, 21 oct 2026 a las 10:00, Agente <a@b.es> escribió:\n> Hola doctora...";
   assert.equal(stripQuoted(text), "¿Tienen stock del 30%?\nGracias");
+});
+
+test("clínica sin actividad en Google", () => {
+  const now = new Date("2026-10-21").getTime();
+  const g = (rating_count: number | null, last_review_at: string | null) => ({ source: "google-maps", rating_count, last_review_at });
+  assert.equal(isInactive(g(0, null), now), true);
+  assert.equal(isInactive(g(12, "2025-06-01T00:00:00Z"), now), true);
+  assert.equal(isInactive(g(12, "2026-09-01T00:00:00Z"), now), false);
+  assert.equal(isInactive(g(null, null), now), false); // aún sin datos de Google
+  assert.equal(isInactive({ source: "csv", rating_count: 0, last_review_at: null }, now), false);
 });

@@ -4,6 +4,7 @@ import { one, query } from "../db";
 import { PROVINCES } from "../provinces";
 import { logEvent } from "../store";
 import { parseCsv, provinceFromAddress } from "./text";
+export { isInactive } from "./text";
 
 export type Prospect = {
   id: number;
@@ -21,6 +22,9 @@ export type Prospect = {
   notes: string | null;
   created_at: string;
   letter_at: string | null;
+  rating: string | null;
+  rating_count: number | null;
+  last_review_at: string | null;
 };
 
 export const PROSPECT_STATUSES = ["nuevo", "carta-preparada", "carta-enviada", "registrado", "descartado"] as const;
@@ -42,9 +46,10 @@ export async function addProspect(p: NewProspect) {
   return row;
 }
 
-export async function listProspects(status?: string) {
+export async function listProspects(status?: string, order: "recientes" | "nota" = "recientes") {
   return query<Prospect>(
-    `select * from prospects where ($1::text is null or status = $1) order by created_at desc, id desc limit 500`,
+    `select * from prospects where ($1::text is null or status = $1)
+     order by ${order === "nota" ? "rating_count desc nulls last, rating desc nulls last," : ""} created_at desc, id desc limit 500`,
     [status ?? null],
   );
 }
@@ -78,11 +83,50 @@ export async function linkProspect(code: string, customerId: number) {
   return p;
 }
 
+type Place = {
+  id: string;
+  displayName?: { text: string };
+  formattedAddress?: string;
+  nationalPhoneNumber?: string;
+  websiteUri?: string;
+  businessStatus?: string;
+  rating?: number;
+  userRatingCount?: number;
+  reviews?: { publishTime?: string }[];
+};
+
+// Guarda una clínica de Google Maps o, si ya estaba, actualiza su nota y su última opinión.
+async function upsertPlace(pl: Place) {
+  // Google devuelve hasta 5 opiniones (las más relevantes): tomamos la más reciente de ellas.
+  const lastReview = (pl.reviews ?? []).map((r) => r.publishTime).filter(Boolean).sort().at(-1) ?? null;
+  return one<{ inserted: boolean }>(
+    `insert into prospects (clinic, address, province, phone, website, source, place_id, code, rating, rating_count, last_review_at)
+     values ($1, $2, $3, $4, $5, 'google-maps', $6, $7, $8, $9, $10)
+     on conflict (place_id) do update set rating = excluded.rating, rating_count = excluded.rating_count,
+       last_review_at = excluded.last_review_at, phone = coalesce(excluded.phone, prospects.phone),
+       website = coalesce(excluded.website, prospects.website)
+     returning (xmax = 0) as inserted`,
+    [
+      pl.displayName?.text ?? "Sin nombre",
+      pl.formattedAddress ?? null,
+      provinceFromAddress(pl.formattedAddress),
+      pl.nationalPhoneNumber ?? null,
+      pl.websiteUri ?? null,
+      pl.id,
+      newCode(),
+      pl.rating ?? null,
+      pl.userRatingCount ?? 0,
+      lastReview,
+    ],
+  );
+}
+
 // Búsqueda de clínicas en Google Maps (Places API, Text Search). Necesita GOOGLE_MAPS_API_KEY.
+// Repetir una búsqueda no duplica clínicas: actualiza su nota y su última opinión.
 export async function searchPlaces(textQuery: string) {
   const key = process.env.GOOGLE_MAPS_API_KEY;
   if (!key) throw new Error("Falta GOOGLE_MAPS_API_KEY para buscar en Google Maps");
-  const found: { added: number; existing: number } = { added: 0, existing: 0 };
+  const found = { added: 0, existing: 0, closed: 0 };
   let pageToken: string | undefined;
   for (let page = 0; page < 3; page++) {
     const res = await fetch("https://places.googleapis.com/v1/places:searchText", {
@@ -90,27 +134,25 @@ export async function searchPlaces(textQuery: string) {
       headers: {
         "Content-Type": "application/json",
         "X-Goog-Api-Key": key,
-        "X-Goog-FieldMask": "places.id,places.displayName,places.formattedAddress,places.nationalPhoneNumber,places.websiteUri,places.businessStatus,nextPageToken",
+        "X-Goog-FieldMask":
+          "places.id,places.displayName,places.formattedAddress,places.nationalPhoneNumber,places.websiteUri,places.businessStatus,places.rating,places.userRatingCount,places.reviews.publishTime,nextPageToken",
       },
       body: JSON.stringify({ textQuery, languageCode: "es", regionCode: "ES", pageSize: 20, pageToken }),
     });
     if (!res.ok) throw new Error(`Google Maps respondió ${res.status}: ${(await res.text()).slice(0, 300)}`);
-    const data = (await res.json()) as {
-      places?: { id: string; displayName?: { text: string }; formattedAddress?: string; nationalPhoneNumber?: string; websiteUri?: string; businessStatus?: string }[];
-      nextPageToken?: string;
-    };
+    const data = (await res.json()) as { places?: Place[]; nextPageToken?: string };
     for (const pl of data.places ?? []) {
-      if (pl.businessStatus && pl.businessStatus !== "OPERATIONAL") continue;
-      const row = await addProspect({
-        clinic: pl.displayName?.text ?? "Sin nombre",
-        address: pl.formattedAddress ?? null,
-        province: provinceFromAddress(pl.formattedAddress),
-        phone: pl.nationalPhoneNumber ?? null,
-        website: pl.websiteUri ?? null,
-        source: "google-maps",
-        place_id: pl.id,
-      } as NewProspect);
-      if (row) found.added++;
+      if (pl.businessStatus && pl.businessStatus !== "OPERATIONAL") {
+        // Cerrada: no la añadimos y, si ya estaba sin carta, la descartamos.
+        await query(
+          `update prospects set status = 'descartado', notes = 'Cerrada según Google Maps' where place_id = $1 and status = 'nuevo'`,
+          [pl.id],
+        );
+        found.closed++;
+        continue;
+      }
+      const row = await upsertPlace(pl);
+      if (row?.inserted) found.added++;
       else found.existing++;
     }
     pageToken = data.nextPageToken;
