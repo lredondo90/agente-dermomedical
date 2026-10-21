@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
-import { company } from "@/lib/company";
+import { brand, company } from "@/lib/company";
 import { getSession } from "@/lib/session";
 
 export const metadata: Metadata = {
-  title: `Larimedical para dermatólogos · ${company.name}`,
-  description: "Pedidos profesionales de Larimedical para consultas de dermatología.",
+  title: `${brand.name} para dermatólogos · ${company.name}`,
+  description: `Pedidos profesionales de ${brand.name} para consultas de dermatología.`,
 };
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -22,7 +22,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <header className="border-b border-line bg-white">
           <nav className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3 text-sm">
             <Link href="/" className="mr-auto font-semibold">
-              Larimedical <span className="font-normal text-muted">· {company.name}</span>
+              {brand.name} <span className="font-normal text-muted">· {company.name}</span>
             </Link>
             <Link href="/catalogo">Catálogo</Link>
             <Link href="/carrito">Carrito</Link>
@@ -40,7 +40,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         </header>
         <main className="mx-auto max-w-6xl px-4 py-8">{children}</main>
         <footer className="mx-auto max-w-6xl px-4 py-8 text-xs text-muted">
-          {company.name}, distribuidor de Larimedical · Venta exclusiva a profesionales sanitarios ·{" "}
+          {company.name}, distribuidor de {brand.name} · Venta exclusiva a profesionales sanitarios ·{" "}
           <Link href="/aviso-legal" className="underline">Aviso legal</Link> ·{" "}
           <Link href="/privacidad" className="underline">Privacidad</Link> ·{" "}
           <Link href="/condiciones" className="underline">Condiciones de venta</Link>

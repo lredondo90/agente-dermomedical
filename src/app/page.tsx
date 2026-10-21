@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { brand } from "@/lib/company";
 import { listLines } from "@/lib/store";
 
 export const dynamic = "force-dynamic";
@@ -11,7 +12,7 @@ export default async function Home() {
         <div className="space-y-4">
           <p className="text-sm font-medium text-accent">Solo para dermatólogos y profesionales sanitarios</p>
           <h1 className="text-3xl font-semibold leading-tight md:text-4xl">
-            Peelings bioquímicos Larimedical para tu consulta, con pedido en dos minutos
+            {brand.headline}
           </h1>
           <p className="text-muted">
             Date de alta, recibe gratis una muestra de la línea que más te interese y haz tus pedidos cuando quieras,

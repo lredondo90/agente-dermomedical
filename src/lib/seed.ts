@@ -1,9 +1,22 @@
-import catalog from "../../data/catalogo.json";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+import { brand } from "./company";
+
+type Catalog = {
+  lines: { id: string; name: string; focus: string }[];
+  products: { slug: string; line: string; name: string; format: string; professional: boolean; url: string }[];
+};
+
+function loadCatalog(): Catalog {
+  const file = path.join(process.cwd(), "data", "catalogos", `${brand.catalog.replace(/[^a-z0-9-]/gi, "")}.json`);
+  return JSON.parse(readFileSync(file, "utf8"));
+}
 
 type Run = (text: string, params?: unknown[]) => Promise<unknown>;
 
 // Carga líneas y productos del catálogo. Nunca pisa precios ni el estado activo que ya se hayan editado en el panel.
 export async function seedCatalog(run: Run) {
+  const catalog = loadCatalog();
   for (const [sort, line] of catalog.lines.entries()) {
     await run(
       `insert into lines (id, name, focus, sort) values ($1, $2, $3, $4)

@@ -5,7 +5,7 @@ import { useActionState } from "react";
 import { register, type FormState } from "../actions";
 import { PROVINCES } from "@/lib/provinces";
 
-export function RegisterForm({ lines, source }: { lines: { id: string; name: string }[]; source?: string }) {
+export function RegisterForm({ lines, source, brandName }: { lines: { id: string; name: string }[]; source?: string; brandName: string }) {
   const [state, action, pending] = useActionState<FormState, FormData>(register, {});
   return (
     <form action={action} className="card grid gap-4 sm:grid-cols-2">
@@ -58,11 +58,11 @@ export function RegisterForm({ lines, source }: { lines: { id: string; name: str
         <label className="flex gap-2"><input type="checkbox" name="professional" required /> Declaro que soy profesional sanitario colegiado.</label>
         <label className="flex gap-2">
           <input type="checkbox" name="consentEmail" />
-          Acepto recibir por correo electrónico información comercial y profesional sobre productos Larimedical.
+          Acepto recibir por correo electrónico información comercial y profesional sobre productos {brandName}.
         </label>
         <label className="flex gap-2">
           <input type="checkbox" name="consentWhatsapp" />
-          Acepto recibir mensajes por WhatsApp sobre mis pedidos y novedades de Larimedical.
+          Acepto recibir mensajes por WhatsApp sobre mis pedidos y novedades de {brandName}.
         </label>
         <label className="flex gap-2">
           <input type="checkbox" name="privacy" required />

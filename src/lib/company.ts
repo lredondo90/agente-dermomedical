@@ -8,4 +8,13 @@ export const company = {
   siteUrl: process.env.SITE_URL ?? "http://localhost:3000",
 };
 
+// Marca y catálogo que vende esta instalación. Para otro cliente basta con cambiar estas variables
+// y añadir su catálogo en data/catalogos/<CATALOG>.json.
+export const brand = {
+  name: process.env.BRAND_NAME ?? "Larimedical",
+  owner: process.env.BRAND_OWNER ?? "Larimide S.L.U.",
+  headline: process.env.BRAND_HEADLINE ?? "Peelings bioquímicos Larimedical para tu consulta, con pedido en dos minutos",
+  catalog: process.env.CATALOG ?? "larimedical",
+};
+
 export const CONSENT_VERSION = "2026-10-21";

@@ -26,7 +26,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/larimedical-web:${{ github.sha }},ghcr.io/${{ github.repository_owner }}/larimedical-web:latest
+          tags: ghcr.io/${{ github.repository_owner }}/agente-dermomedical:${{ github.sha }},ghcr.io/${{ github.repository_owner }}/agente-dermomedical:latest
 
   azure:
     needs: imagen
@@ -38,4 +38,4 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Actualizar contenedor
         run: |
-          az containerapp update -g "${{ vars.AZURE_RESOURCE_GROUP }}" -n larimedical-web --image ghcr.io/${{ github.repository_owner }}/larimedical-web:${{ github.sha }}
+          az containerapp update -g "${{ vars.AZURE_RESOURCE_GROUP }}" -n agente-dermomedical --image ghcr.io/${{ github.repository_owner }}/agente-dermomedical:${{ github.sha }}

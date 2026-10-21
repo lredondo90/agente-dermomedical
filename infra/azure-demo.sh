@@ -6,9 +6,9 @@
 # Uso: GHCR_TOKEN=<token> BUDGET_EMAIL=<tu correo> ADMIN_PASSWORD=<contraseña del panel> ./infra/azure-demo.sh
 set -euo pipefail
 
-RG="${RG:-larimedical-demo}"
+RG="${RG:-agente-dermomedical-demo}"
 LOCATION="${LOCATION:-spaincentral}"
-ENV_NAME="${ENV_NAME:-larimedical-env}"
+ENV_NAME="${ENV_NAME:-agente-dermomedical-env}"
 OWNER="${OWNER:-lredondo90}"
 COMPANY_NAME="${COMPANY_NAME:-[Tu empresa]}"
 : "${GHCR_TOKEN:?Indica GHCR_TOKEN (token de GitHub con read:packages)}"
@@ -26,8 +26,8 @@ az containerapp env create -g "$RG" -n "$ENV_NAME" -l "$LOCATION" --logs-destina
 
 # Una sola réplica porque la base de datos de la demo vive dentro del contenedor.
 # Se apaga sin visitas (min-replicas 0): gratis, pero los datos de prueba se pierden al apagarse.
-az containerapp create -g "$RG" -n larimedical-web --environment "$ENV_NAME" \
-  --image "ghcr.io/$OWNER/larimedical-web:latest" \
+az containerapp create -g "$RG" -n agente-dermomedical --environment "$ENV_NAME" \
+  --image "ghcr.io/$OWNER/agente-dermomedical:latest" \
   --registry-server ghcr.io --registry-username "$OWNER" --registry-password "$GHCR_TOKEN" \
   --target-port 3000 --ingress external \
   --secrets "session-secret=$SESSION_SECRET" "admin-password=$ADMIN_PASSWORD" \
@@ -35,8 +35,8 @@ az containerapp create -g "$RG" -n larimedical-web --environment "$ENV_NAME" \
     DEMO_PRICES=1 "COMPANY_NAME=$COMPANY_NAME" \
   --cpu 0.5 --memory 1Gi --min-replicas 0 --max-replicas 1 -o none
 
-FQDN=$(az containerapp show -g "$RG" -n larimedical-web --query properties.configuration.ingress.fqdn -o tsv)
-az containerapp update -g "$RG" -n larimedical-web --set-env-vars "SITE_URL=https://$FQDN" -o none
+FQDN=$(az containerapp show -g "$RG" -n agente-dermomedical --query properties.configuration.ingress.fqdn -o tsv)
+az containerapp update -g "$RG" -n agente-dermomedical --set-env-vars "SITE_URL=https://$FQDN" -o none
 
 # Aviso por correo en cuanto el gasto del mes pase de 1 €.
 SUB=$(az account show --query id -o tsv)
