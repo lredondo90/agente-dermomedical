@@ -50,7 +50,7 @@ export async function searchClinics(form: FormData) {
   let msg: string;
   try {
     const r = await searchPlaces(q);
-    msg = `Google Maps: ${r.added} clínicas nuevas, ${r.existing} ya estaban`;
+    msg = `Google Maps: ${r.added} clínicas nuevas, ${r.existing} ya estaban (nota actualizada)${r.closed ? `, ${r.closed} cerradas que no se añaden` : ""}`;
   } catch (e) {
     msg = e instanceof Error ? e.message : String(e);
   }
