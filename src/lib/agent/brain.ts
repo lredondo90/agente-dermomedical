@@ -32,7 +32,7 @@ export async function handleInbound(opts: { customerId: number; channel: Channel
       author: "agente",
       reply: true,
       subject: "Baja confirmada",
-      body: `Hecho: no te enviaremos más mensajes por ${opts.channel === "email" ? "correo" : "WhatsApp"}. Tu cuenta y tus pedidos siguen disponibles en la web.`,
+      body: `Hecho: no le enviaremos más mensajes por ${opts.channel === "email" ? "correo" : "WhatsApp"}. Su cuenta y sus pedidos siguen disponibles en la web.`,
     });
     await store.setConsents(
       customer.id,
