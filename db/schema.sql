@@ -135,3 +135,16 @@ create table if not exists messages (
 
 alter table customers add column if not exists needs_human boolean not null default false;
 alter table customers add column if not exists prospect_code text;
+
+-- En Supabase, el esquema public también se publica por su API REST. La APP entra como propietaria de las tablas
+-- (no le afecta RLS); activar RLS sin políticas cierra esa API para que nadie lea los datos con la clave pública.
+alter table lines enable row level security;
+alter table products enable row level security;
+alter table customers enable row level security;
+alter table orders enable row level security;
+alter table order_lines enable row level security;
+alter table login_tokens enable row level security;
+alter table events enable row level security;
+alter table settings enable row level security;
+alter table prospects enable row level security;
+alter table messages enable row level security;
