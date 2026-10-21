@@ -33,7 +33,11 @@ async function connect(): Promise<Runner> {
 }
 
 export async function query<T = Record<string, unknown>>(text: string, params: unknown[] = []): Promise<T[]> {
-  shared.__dbRunner ??= connect();
+  // Si la conexión falla (p. ej. contraseña mal puesta), no la guardamos: la siguiente petición lo vuelve a intentar.
+  shared.__dbRunner ??= connect().catch((e) => {
+    shared.__dbRunner = undefined;
+    throw e;
+  });
   const run = await shared.__dbRunner;
   return (await run(text, params)) as T[];
 }
