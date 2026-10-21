@@ -1,0 +1,602 @@
+{
+ "source": "https://larimide.com/larimedical/",
+ "fetchedAt": "2026-10-21",
+ "lines": [
+  {
+   "id": "comedopeel",
+   "name": "Comedopeel",
+   "focus": "Acné comedoniano inflamatorio"
+  },
+  {
+   "id": "scarpeel",
+   "name": "Scarpeel",
+   "focus": "Pieles reactivas, barrera cutánea y cicatrices de acné"
+  },
+  {
+   "id": "melanze",
+   "name": "Melanze",
+   "focus": "Hiperpigmentación"
+  },
+  {
+   "id": "agepeel",
+   "name": "Agepeel",
+   "focus": "Envejecimiento prematuro"
+  },
+  {
+   "id": "hydrapeel",
+   "name": "Hydrapeel",
+   "focus": "Renovación epidérmica y rehidratación"
+  },
+  {
+   "id": "pureglycopeel",
+   "name": "Pureglycopeel",
+   "focus": "Renovación celular"
+  },
+  {
+   "id": "pre-post-peel",
+   "name": "Pre y post-peel",
+   "focus": "Preparación y cuidado posterior al peeling"
+  },
+  {
+   "id": "limpiadores",
+   "name": "Limpiadores",
+   "focus": "Limpieza"
+  },
+  {
+   "id": "satin",
+   "name": "Satin 50",
+   "focus": "Protección solar con color"
+  },
+  {
+   "id": "especiales",
+   "name": "Sets y especiales",
+   "focus": "Formatos combinados y tratamientos específicos"
+  }
+ ],
+ "products": [
+  {
+   "slug": "comedopeel-peeling-bioquimico",
+   "line": "comedopeel",
+   "name": "Comedopeel – Peeling Bioquímico 60ml",
+   "format": "Envase",
+   "professional": true,
+   "url": "https://larimide.com/producto/comedopeel-peeling-bioquimico/"
+  },
+  {
+   "slug": "comedopeel-4ml-peeling-bioquimico-4-ml-monodosis",
+   "line": "comedopeel",
+   "name": "Comedopeel – Peeling Bioquímico 4 ml (monodosis)",
+   "format": "Monodosis",
+   "professional": true,
+   "url": "https://larimide.com/producto/comedopeel-4ml-peeling-bioquimico-4-ml-monodosis/"
+  },
+  {
+   "slug": "comedopeel-plus-peeling-bioquimico",
+   "line": "comedopeel",
+   "name": "Comedopeel Plus – Peeling Bioquímico 60ml",
+   "format": "Envase",
+   "professional": true,
+   "url": "https://larimide.com/producto/comedopeel-plus-peeling-bioquimico/"
+  },
+  {
+   "slug": "comedopeel-plus-peeling-bioquimico-4-ml-monodosis",
+   "line": "comedopeel",
+   "name": "Comedopeel Plus – Peeling Bioquímico 4 ml (monodosis)",
+   "format": "Monodosis",
+   "professional": true,
+   "url": "https://larimide.com/producto/comedopeel-plus-peeling-bioquimico-4-ml-monodosis/"
+  },
+  {
+   "slug": "comedopeel-serum",
+   "line": "comedopeel",
+   "name": "Comedopeel – Sérum 15ml",
+   "format": "Envase",
+   "professional": false,
+   "url": "https://larimide.com/producto/comedopeel-serum/"
+  },
+  {
+   "slug": "comedopeel-serum-3ml-sachette",
+   "line": "comedopeel",
+   "name": "Comedopeel – Sérum 3 ml Sachette",
+   "format": "Sachette",
+   "professional": false,
+   "url": "https://larimide.com/producto/comedopeel-serum-3ml-sachette/"
+  },
+  {
+   "slug": "comedopeel-gel-limpiador",
+   "line": "comedopeel",
+   "name": "Comedopeel – Gel Limpiador 250ml",
+   "format": "Envase",
+   "professional": false,
+   "url": "https://larimide.com/producto/comedopeel-gel-limpiador/"
+  },
+  {
+   "slug": "comedopeel-gel-limpiador-3ml-sachette",
+   "line": "comedopeel",
+   "name": "Comedopeel – Gel Limpiador 3ml Sachette",
+   "format": "Sachette",
+   "professional": false,
+   "url": "https://larimide.com/producto/comedopeel-gel-limpiador-3ml-sachette/"
+  },
+  {
+   "slug": "comedopeel-gel-limpiador-500ml",
+   "line": "comedopeel",
+   "name": "Comedopeel – Gel Limpiador 500ml",
+   "format": "Envase",
+   "professional": true,
+   "url": "https://larimide.com/producto/comedopeel-gel-limpiador-500ml/"
+  },
+  {
+   "slug": "https-larimide-com-producto-comedopeel-purifying-gel",
+   "line": "comedopeel",
+   "name": "Comedopeel – Purifying Gel 50ml",
+   "format": "Envase",
+   "professional": false,
+   "url": "https://larimide.com/producto/https-larimide-com-producto-comedopeel-purifying-gel/"
+  },
+  {
+   "slug": "comedopeel-purifying-gel-3ml-sachette-2",
+   "line": "comedopeel",
+   "name": "Comedopeel – Purifying Gel 3ml Sachette",
+   "format": "Sachette",
+   "professional": false,
+   "url": "https://larimide.com/producto/comedopeel-purifying-gel-3ml-sachette-2/"
+  },
+  {
+   "slug": "comedopeel-cocktail-1ml-muestra",
+   "line": "comedopeel",
+   "name": "Comedopeel – Cocktail 1ml (muestra)",
+   "format": "Muestra",
+   "professional": true,
+   "url": "https://larimide.com/producto/comedopeel-cocktail-1ml-muestra/"
+  },
+  {
+   "slug": "comedopeel-cocktail-5u-x-10ml",
+   "line": "comedopeel",
+   "name": "Comedopeel – Cocktail 5u x 10ml",
+   "format": "Viales",
+   "professional": true,
+   "url": "https://larimide.com/producto/comedopeel-cocktail-5u-x-10ml/"
+  },
+  {
+   "slug": "hydrapeel-peeling-bioquimico",
+   "line": "hydrapeel",
+   "name": "Hydrapeel – Peeling Bioquímico 60ml",
+   "format": "Envase",
+   "professional": true,
+   "url": "https://larimide.com/producto/hydrapeel-peeling-bioquimico/"
+  },
+  {
+   "slug": "hydrapeel-4ml-peeling-bioquimico-monodosis",
+   "line": "hydrapeel",
+   "name": "Hydrapeel – Peeling Bioquímico 4 ml (monodosis)",
+   "format": "Monodosis",
+   "professional": true,
+   "url": "https://larimide.com/producto/hydrapeel-4ml-peeling-bioquimico-monodosis/"
+  },
+  {
+   "slug": "hydrapeel-serum",
+   "line": "hydrapeel",
+   "name": "Hydrapeel – Sérum 15ml",
+   "format": "Envase",
+   "professional": false,
+   "url": "https://larimide.com/producto/hydrapeel-serum/"
+  },
+  {
+   "slug": "hydrapeel-serum-3ml-sachette",
+   "line": "hydrapeel",
+   "name": "Hydrapeel – Sérum 3 ml Sachette",
+   "format": "Sachette",
+   "professional": false,
+   "url": "https://larimide.com/producto/hydrapeel-serum-3ml-sachette/"
+  },
+  {
+   "slug": "hydrapeel-cocktail-1ml-muestra",
+   "line": "hydrapeel",
+   "name": "Hydrapeel – Cocktail 1ml (muestra)",
+   "format": "Muestra",
+   "professional": true,
+   "url": "https://larimide.com/producto/hydrapeel-cocktail-1ml-muestra/"
+  },
+  {
+   "slug": "hydrapeel-cocktail-5u-x-10ml",
+   "line": "hydrapeel",
+   "name": "Hydrapeel – Cocktail 5u x 10ml",
+   "format": "Viales",
+   "professional": true,
+   "url": "https://larimide.com/producto/hydrapeel-cocktail-5u-x-10ml/"
+  },
+  {
+   "slug": "scarpeel-peeling-bioquimico",
+   "line": "scarpeel",
+   "name": "Scarpeel – Peeling Bioquímico 60ml",
+   "format": "Envase",
+   "professional": true,
+   "url": "https://larimide.com/producto/scarpeel-peeling-bioquimico/"
+  },
+  {
+   "slug": "scarpeel-4ml-peeling-bioquimico-monodosis",
+   "line": "scarpeel",
+   "name": "Scarpeel – Peeling Bioquímico 4 ml (monodosis)",
+   "format": "Monodosis",
+   "professional": true,
+   "url": "https://larimide.com/producto/scarpeel-4ml-peeling-bioquimico-monodosis/"
+  },
+  {
+   "slug": "scarpeel-crema",
+   "line": "scarpeel",
+   "name": "Scarpeel – Crema 50ml",
+   "format": "Envase",
+   "professional": false,
+   "url": "https://larimide.com/producto/scarpeel-crema/"
+  },
+  {
+   "slug": "scarpeel-crema-250-ml",
+   "line": "scarpeel",
+   "name": "Scarpeel – Crema 250 ml",
+   "format": "Envase",
+   "professional": false,
+   "url": "https://larimide.com/producto/scarpeel-crema-250-ml/"
+  },
+  {
+   "slug": "scarpeel-crema-3ml-sachette",
+   "line": "scarpeel",
+   "name": "Scarpeel – Crema 3ml Sachette",
+   "format": "Sachette",
+   "professional": false,
+   "url": "https://larimide.com/producto/scarpeel-crema-3ml-sachette/"
+  },
+  {
+   "slug": "scarpeel-cocktail-1-1ml-muestra",
+   "line": "scarpeel",
+   "name": "Scarpeel – Cocktail 1 1ml (muestra)",
+   "format": "Muestra",
+   "professional": true,
+   "url": "https://larimide.com/producto/scarpeel-cocktail-1-1ml-muestra/"
+  },
+  {
+   "slug": "scarpeel-cocktail-1-5u-x-10ml",
+   "line": "scarpeel",
+   "name": "Scarpeel – Cocktail 1 5u x 10ml",
+   "format": "Viales",
+   "professional": true,
+   "url": "https://larimide.com/producto/scarpeel-cocktail-1-5u-x-10ml/"
+  },
+  {
+   "slug": "scarpeel-cocktail-2-1ml-muestra",
+   "line": "scarpeel",
+   "name": "Scarpeel – Cocktail 2 1ml (muestra)",
+   "format": "Muestra",
+   "professional": true,
+   "url": "https://larimide.com/producto/scarpeel-cocktail-2-1ml-muestra/"
+  },
+  {
+   "slug": "scarpeel-cocktail-2-5u-x-10ml",
+   "line": "scarpeel",
+   "name": "Scarpeel – Cocktail 2 5u x 10ml",
+   "format": "Viales",
+   "professional": true,
+   "url": "https://larimide.com/producto/scarpeel-cocktail-2-5u-x-10ml/"
+  },
+  {
+   "slug": "agepeel-peeling-bioquimico",
+   "line": "agepeel",
+   "name": "Agepeel – Peeling Bioquímico 60ml",
+   "format": "Envase",
+   "professional": true,
+   "url": "https://larimide.com/producto/agepeel-peeling-bioquimico/"
+  },
+  {
+   "slug": "agepeel-4ml-peeling-bioquimico-monodosis",
+   "line": "agepeel",
+   "name": "Agepeel – Peeling Bioquímico 4 ml (monodosis)",
+   "format": "Monodosis",
+   "professional": true,
+   "url": "https://larimide.com/producto/agepeel-4ml-peeling-bioquimico-monodosis/"
+  },
+  {
+   "slug": "agepeel-plus-peeling-bioquimico",
+   "line": "agepeel",
+   "name": "Agepeel Plus – Peeling Bioquímico 60ml",
+   "format": "Envase",
+   "professional": true,
+   "url": "https://larimide.com/producto/agepeel-plus-peeling-bioquimico/"
+  },
+  {
+   "slug": "agepeel-plus-4ml-peeling-bioquimico-monodosis",
+   "line": "agepeel",
+   "name": "Agepeel Plus – Peeling Bioquímico 4 ml (monodosis)",
+   "format": "Monodosis",
+   "professional": true,
+   "url": "https://larimide.com/producto/agepeel-plus-4ml-peeling-bioquimico-monodosis/"
+  },
+  {
+   "slug": "agepeel-crema",
+   "line": "agepeel",
+   "name": "Agepeel – Crema 50ml",
+   "format": "Envase",
+   "professional": false,
+   "url": "https://larimide.com/producto/agepeel-crema/"
+  },
+  {
+   "slug": "agepeel-crema-250-ml",
+   "line": "agepeel",
+   "name": "Agepeel – Crema 250 ml",
+   "format": "Envase",
+   "professional": false,
+   "url": "https://larimide.com/producto/agepeel-crema-250-ml/"
+  },
+  {
+   "slug": "agepeel-crema-3ml-sachette",
+   "line": "agepeel",
+   "name": "Agepeel – Crema 3ml Sachette",
+   "format": "Sachette",
+   "professional": false,
+   "url": "https://larimide.com/producto/agepeel-crema-3ml-sachette/"
+  },
+  {
+   "slug": "agepeel-cocktail-1ml-muestra",
+   "line": "agepeel",
+   "name": "Agepeel – Cocktail 1ml (muestra)",
+   "format": "Muestra",
+   "professional": true,
+   "url": "https://larimide.com/producto/agepeel-cocktail-1ml-muestra/"
+  },
+  {
+   "slug": "agepeel-cocktail-5u-x-10ml",
+   "line": "agepeel",
+   "name": "Agepeel – Cocktail 5u x 10ml",
+   "format": "Viales",
+   "professional": true,
+   "url": "https://larimide.com/producto/agepeel-cocktail-5u-x-10ml/"
+  },
+  {
+   "slug": "melanze-peeling-bioquimico",
+   "line": "melanze",
+   "name": "Melanze – Peeling Bioquímico 60ml",
+   "format": "Envase",
+   "professional": true,
+   "url": "https://larimide.com/producto/melanze-peeling-bioquimico/"
+  },
+  {
+   "slug": "melanze-4ml-peeling-bioquimico-monodosis",
+   "line": "melanze",
+   "name": "Melanze – Peeling Bioquímico 4 ml (monodosis)",
+   "format": "Monodosis",
+   "professional": true,
+   "url": "https://larimide.com/producto/melanze-4ml-peeling-bioquimico-monodosis/"
+  },
+  {
+   "slug": "melanze-plus-peeling-bioquimico",
+   "line": "melanze",
+   "name": "Melanze Plus – Peeling Bioquímico 60ml",
+   "format": "Envase",
+   "professional": true,
+   "url": "https://larimide.com/producto/melanze-plus-peeling-bioquimico/"
+  },
+  {
+   "slug": "melanze-plus-4ml-peeling-bioquimico-monodosis",
+   "line": "melanze",
+   "name": "Melanze Plus – Peeling Bioquímico 4 ml (monodosis)",
+   "format": "Monodosis",
+   "professional": true,
+   "url": "https://larimide.com/producto/melanze-plus-4ml-peeling-bioquimico-monodosis/"
+  },
+  {
+   "slug": "melanze-tranexamic-peeling-bioquimico",
+   "line": "melanze",
+   "name": "Melanze Tranexamic – Peeling Bioquímico 60ml",
+   "format": "Envase",
+   "professional": true,
+   "url": "https://larimide.com/producto/melanze-tranexamic-peeling-bioquimico/"
+  },
+  {
+   "slug": "melanze-tranexamic-4ml-peeling-bioquimico-monodosis",
+   "line": "melanze",
+   "name": "Melanze Tranexamic – Peeling Bioquímico 4 ml (monodosis)",
+   "format": "Monodosis",
+   "professional": true,
+   "url": "https://larimide.com/producto/melanze-tranexamic-4ml-peeling-bioquimico-monodosis/"
+  },
+  {
+   "slug": "melanze-tranexamic-home-peeling-bioquimico",
+   "line": "melanze",
+   "name": "Melanze Tranexamic Home – Peeling Bioquímico 30ml",
+   "format": "Envase",
+   "professional": false,
+   "url": "https://larimide.com/producto/melanze-tranexamic-home-peeling-bioquimico/"
+  },
+  {
+   "slug": "melanze-tranexamic-home-4ml-peeling-bioquimico-monodosis",
+   "line": "melanze",
+   "name": "Melanze Tranexamic Home – Peeling Bioquímico 4 ml (monodosis)",
+   "format": "Monodosis",
+   "professional": false,
+   "url": "https://larimide.com/producto/melanze-tranexamic-home-4ml-peeling-bioquimico-monodosis/"
+  },
+  {
+   "slug": "melanze-crema",
+   "line": "melanze",
+   "name": "Melanze – Crema 50ml",
+   "format": "Envase",
+   "professional": false,
+   "url": "https://larimide.com/producto/melanze-crema/"
+  },
+  {
+   "slug": "melanze-crema-250-ml",
+   "line": "melanze",
+   "name": "Melanze – Crema 250 ml",
+   "format": "Envase",
+   "professional": false,
+   "url": "https://larimide.com/producto/melanze-crema-250-ml/"
+  },
+  {
+   "slug": "melanze-crema-3ml-sachette",
+   "line": "melanze",
+   "name": "Melanze – Crema 3ml Sachette",
+   "format": "Sachette",
+   "professional": false,
+   "url": "https://larimide.com/producto/melanze-crema-3ml-sachette/"
+  },
+  {
+   "slug": "melanze-cocktail-1ml-muestra",
+   "line": "melanze",
+   "name": "Melanze – Cocktail 1ml (muestra)",
+   "format": "Muestra",
+   "professional": true,
+   "url": "https://larimide.com/producto/melanze-cocktail-1ml-muestra/"
+  },
+  {
+   "slug": "melanze-cocktail-5u-x-10ml",
+   "line": "melanze",
+   "name": "Melanze – Cocktail 5u x 10ml",
+   "format": "Viales",
+   "professional": true,
+   "url": "https://larimide.com/producto/melanze-cocktail-5u-x-10ml/"
+  },
+  {
+   "slug": "pureglycopeel-peeling-bioquimico",
+   "line": "pureglycopeel",
+   "name": "Pureglycopeel – Peeling Bioquímico 30ml",
+   "format": "Envase",
+   "professional": true,
+   "url": "https://larimide.com/producto/pureglycopeel-peeling-bioquimico/"
+  },
+  {
+   "slug": "pureglycopeel-4ml-peeling-bioquimico-monodosis",
+   "line": "pureglycopeel",
+   "name": "Pureglycopeel – Peeling Bioquímico 4 ml (monodosis)",
+   "format": "Monodosis",
+   "professional": true,
+   "url": "https://larimide.com/producto/pureglycopeel-4ml-peeling-bioquimico-monodosis/"
+  },
+  {
+   "slug": "pureglycopeel-home-peeling-bioquimico",
+   "line": "pureglycopeel",
+   "name": "Pureglycopeel Home – Peeling Bioquímico 30ml",
+   "format": "Envase",
+   "professional": false,
+   "url": "https://larimide.com/producto/pureglycopeel-home-peeling-bioquimico/"
+  },
+  {
+   "slug": "pureglycopeel-home-4ml-peeling-bioquimico-monodosis",
+   "line": "pureglycopeel",
+   "name": "Pureglycopeel Home – Peeling Bioquímico 4 ml (monodosis)",
+   "format": "Monodosis",
+   "professional": false,
+   "url": "https://larimide.com/producto/pureglycopeel-home-4ml-peeling-bioquimico-monodosis/"
+  },
+  {
+   "slug": "premiere-leche-limpiadora-universal-3ml-sachette",
+   "line": "limpiadores",
+   "name": "Première – Leche Limpiadora Universal 3ml Sachette",
+   "format": "Sachette",
+   "professional": false,
+   "url": "https://larimide.com/producto/premiere-leche-limpiadora-universal-3ml-sachette/"
+  },
+  {
+   "slug": "pre-peel",
+   "line": "pre-post-peel",
+   "name": "Pre-Peel 250ml",
+   "format": "Envase",
+   "professional": true,
+   "url": "https://larimide.com/producto/pre-peel/"
+  },
+  {
+   "slug": "post-peel-250-ml",
+   "line": "pre-post-peel",
+   "name": "Post-Peel 250ml",
+   "format": "Envase",
+   "professional": true,
+   "url": "https://larimide.com/producto/post-peel-250-ml/"
+  },
+  {
+   "slug": "post-peel-plus",
+   "line": "pre-post-peel",
+   "name": "Post-Peel Plus 30u x 2ml",
+   "format": "Viales",
+   "professional": false,
+   "url": "https://larimide.com/producto/post-peel-plus/"
+  },
+  {
+   "slug": "post-peel-plus-7u-x-2ml",
+   "line": "pre-post-peel",
+   "name": "Post-Peel Plus 7u x 2ml",
+   "format": "Viales",
+   "professional": false,
+   "url": "https://larimide.com/producto/post-peel-plus-7u-x-2ml/"
+  },
+  {
+   "slug": "post-peel-calming-mask",
+   "line": "pre-post-peel",
+   "name": "Post-Peel Calming Mask 200ml",
+   "format": "Envase",
+   "professional": true,
+   "url": "https://larimide.com/producto/post-peel-calming-mask/"
+  },
+  {
+   "slug": "satin-50",
+   "line": "satin",
+   "name": "SATIN 50 – 50ml",
+   "format": "Envase",
+   "professional": false,
+   "url": "https://larimide.com/producto/satin-50/"
+  },
+  {
+   "slug": "satin-50-3ml-sachette-2",
+   "line": "satin",
+   "name": "SATIN 50 – 3ml Sachette",
+   "format": "Sachette",
+   "professional": false,
+   "url": "https://larimide.com/producto/satin-50-3ml-sachette-2/"
+  },
+  {
+   "slug": "satin-50-doree",
+   "line": "satin",
+   "name": "SATIN 50 Dorée 50ml",
+   "format": "Envase",
+   "professional": false,
+   "url": "https://larimide.com/producto/satin-50-doree/"
+  },
+  {
+   "slug": "satin-50-doree-50ml-3ml-sachette",
+   "line": "satin",
+   "name": "SATIN 50 Dorée 3ml Sachette",
+   "format": "Sachette",
+   "professional": false,
+   "url": "https://larimide.com/producto/satin-50-doree-50ml-3ml-sachette/"
+  },
+  {
+   "slug": "satin-50-natural",
+   "line": "satin",
+   "name": "SATIN 50 Natural 50ml",
+   "format": "Envase",
+   "professional": false,
+   "url": "https://larimide.com/producto/satin-50-natural/"
+  },
+  {
+   "slug": "satin-50-natural-3ml-sachette-2",
+   "line": "satin",
+   "name": "SATIN 50 Natural 3ml Sachette",
+   "format": "Sachette",
+   "professional": false,
+   "url": "https://larimide.com/producto/satin-50-natural-3ml-sachette-2/"
+  },
+  {
+   "slug": "cocktail-set-6u-x-10ml",
+   "line": "especiales",
+   "name": "Cocktail Set 6u x 10ml",
+   "format": "Viales",
+   "professional": true,
+   "url": "https://larimide.com/producto/cocktail-set-6u-x-10ml/"
+  },
+  {
+   "slug": "renad-2ml",
+   "line": "especiales",
+   "name": "reNAD+ 7u x 2ml",
+   "format": "Viales",
+   "professional": false,
+   "url": "https://larimide.com/producto/renad-2ml/"
+  }
+ ]
+}

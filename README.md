@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# APP de pedidos Larimedical para dermatólogos
 
-## Getting Started
+Web donde los dermatólogos se dan de alta (con sus consentimientos de correo y WhatsApp), reciben una muestra gratuita
+y hacen pedidos del catálogo Larimedical con descuento por volumen. El distribuidor lo gestiona todo desde `/panel`.
+Es la base sobre la que trabajará el agente de IA (paso 3).
 
-First, run the development server:
+## Qué incluye
+
+| Parte | Ruta | Qué hace |
+| --- | --- | --- |
+| Inicio | `/` | Presentación para médicos y acceso a la muestra gratuita |
+| Alta profesional | `/alta` | Nº de colegiado, clínica, provincia, consentimientos separados de correo y WhatsApp, muestra gratuita. `?origen=carta` guarda de dónde vino |
+| Entrar | `/entrar` | Acceso sin contraseña con enlace por correo (caduca en 30 min) |
+| Catálogo | `/catalogo` | 68 productos en 10 líneas. Sin precio = visible pero no se puede pedir |
+| Carrito | `/carrito` | Cantidades, descuento por volumen (máx. 10 %), envío, IVA (0 % en Canarias, Ceuta y Melilla) |
+| Mis pedidos | `/pedidos` | Historial, detalle, datos de transferencia y «Repetir este pedido» |
+| Mi cuenta | `/cuenta` | Darse de baja de correo o WhatsApp al momento |
+| Panel | `/panel` | Resumen, pedidos y su estado, clientes con sus consentimientos, precios y descuentos |
+| Legal | `/privacidad`, `/aviso-legal`, `/condiciones` | Borradores para revisar con un abogado |
+
+Cada alta, consentimiento, muestra, pedido y cambio de estado queda en la tabla `events`, que también usará el agente.
+
+## Arrancar en local
+
+Requiere Node 20 o superior.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env.local   # pon al menos ADMIN_PASSWORD
+npm run dev                  # http://localhost:3000
+npm test                     # pruebas de precios y descuentos
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Sin `DATABASE_URL` usa una base de datos local en `.data/` (PGlite), sin instalar nada. Sin `RESEND_API_KEY` los correos
+se escriben en la consola y la página de entrar muestra el enlace de acceso.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Poner en marcha
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Crear un proyecto en Supabase y copiar su cadena de conexión en `DATABASE_URL`. Las tablas se crean solas al arrancar (`db/schema.sql`).
+2. Desplegar en Vercel con las variables de `.env.example` (`SESSION_SECRET` largo y aleatorio).
+3. Dominio propio y cuenta de Resend para `MAIL_FROM`.
+4. Entrar en `/panel/productos` y poner los precios profesionales.
 
-## Learn More
+## Catálogo
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`data/catalogo.json` se sacó de la web pública de Larimide el 21/10/2026. Al arrancar se actualizan nombres y líneas,
+pero nunca se pisan los precios ni los productos desactivados en el panel. La línea de limpiadores solo tiene un producto
+porque su página no se pudo leer; se pueden añadir al JSON.
