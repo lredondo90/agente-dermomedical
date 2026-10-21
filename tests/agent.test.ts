@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { findForbidden, isInactive, normalizePhone, parseCsv, provinceFromAddress, stripQuoted } from "../src/lib/agent/text";
+import { cityFromAddress, findForbidden, isInactive, normalizePhone, parseCsv, provinceFromAddress, stripQuoted } from "../src/lib/agent/text";
 
 test("frases prohibidas: palabra completa, sin distinguir mayúsculas", () => {
   assert.equal(findForbidden("Este peeling CURA el acné", ["cura"]), "cura");
@@ -40,4 +40,10 @@ test("clínica sin actividad en Google", () => {
   assert.equal(isInactive(g(12, "2026-09-01T00:00:00Z"), now), false);
   assert.equal(isInactive(g(null, null), now), false); // aún sin datos de Google
   assert.equal(isInactive({ source: "csv", rating_count: 0, last_review_at: null }, now), false);
+});
+
+test("ciudad desde la dirección", () => {
+  assert.equal(cityFromAddress("C. de Colón, 1, 46004 Valencia, España"), "Valencia");
+  assert.equal(cityFromAddress("Av. de Aragón 30, 46021 València, Valencia, España"), "València");
+  assert.equal(cityFromAddress("Calle Mayor 3, Madrid"), null);
 });
