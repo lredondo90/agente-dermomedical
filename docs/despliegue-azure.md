@@ -33,6 +33,9 @@ tras un rato sin uso tarda unos segundos. Para datos permanentes, añade `DATABA
    `az ad sp create-for-rbac --name agente-dermomedical-ci --role contributor --scopes /subscriptions/<id>/resourceGroups/agente-dermomedical-demo --sdk-auth`,
    guardar su salida como secreto `AZURE_CREDENTIALS` y crear la variable `AZURE_RESOURCE_GROUP=agente-dermomedical-demo`.
 
+Si ya tienes otro entorno de Container Apps (por ejemplo el de portal-pedidos), el script lo reutiliza, porque las
+suscripciones gratuitas solo admiten uno por región. Borrar este grupo de recursos no afecta a ese entorno.
+
 ## Borrar la demo
 
 ```bash

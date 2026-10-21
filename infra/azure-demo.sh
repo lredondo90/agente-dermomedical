@@ -21,12 +21,19 @@ az provider register --namespace Microsoft.App --wait
 
 az group create -n "$RG" -l "$LOCATION" -o none
 
-# Entorno sin Log Analytics para no generar coste de registros.
-az containerapp env create -g "$RG" -n "$ENV_NAME" -l "$LOCATION" --logs-destination none -o none
+# Las suscripciones gratuitas solo permiten un entorno de Container Apps por región: si ya existe uno
+# (por ejemplo el de portal-pedidos), la APP se instala en él. Si no, se crea uno sin Log Analytics.
+ENV_ID="${ENV_ID:-$(az containerapp env list --query "[0].id" -o tsv)}"
+if [ -z "$ENV_ID" ]; then
+  az containerapp env create -g "$RG" -n "$ENV_NAME" -l "$LOCATION" --logs-destination none -o none
+  ENV_ID=$(az containerapp env show -g "$RG" -n "$ENV_NAME" --query id -o tsv)
+else
+  echo "Usando el entorno existente: $ENV_ID"
+fi
 
 # Una sola réplica porque la base de datos de la demo vive dentro del contenedor.
 # Se apaga sin visitas (min-replicas 0): gratis, pero los datos de prueba se pierden al apagarse.
-az containerapp create -g "$RG" -n agente-dermomedical --environment "$ENV_NAME" \
+az containerapp create -g "$RG" -n agente-dermomedical --environment "$ENV_ID" \
   --image "ghcr.io/$OWNER/agente-dermomedical:latest" \
   --registry-server ghcr.io --registry-username "$OWNER" --registry-password "$GHCR_TOKEN" \
   --target-port 3000 --ingress external \
