@@ -10,7 +10,7 @@ export default async function ProductosPage() {
   const products = await listProducts({ includeInactive: true });
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Productos y precios</h1>
+      <h1 className="text-3xl font-semibold">Productos y precios</h1>
       <PanelNav />
       <p className="text-sm text-muted">Precio profesional sin IVA, en euros. Sin precio, el producto se ve en el catálogo pero no se puede pedir.</p>
       <table className="w-full text-sm">
@@ -28,7 +28,7 @@ export default async function ProductosPage() {
                   <input type="hidden" name="id" value={p.id} />
                   <input name="price" inputMode="decimal" defaultValue={p.price_cents != null ? (p.price_cents / 100).toFixed(2) : ""} className="input w-28 py-1" aria-label={`Precio de ${p.name}`} />
                   <input type="checkbox" name="active" defaultChecked={p.active} aria-label="Activo" />
-                  <button className="btn-ghost py-1">Guardar</button>
+                  <button className="btn-ghost h-8 px-3">Guardar</button>
                 </form>
               </td>
             </tr>

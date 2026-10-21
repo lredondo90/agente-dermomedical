@@ -15,9 +15,9 @@ export default async function PedidoPage({ params, searchParams }: { params: Pro
   const { nuevo } = await searchParams;
   return (
     <div className="mx-auto max-w-3xl space-y-4">
-      {nuevo && <div className="card border-accent bg-accent-soft text-sm">Pedido recibido. Te hemos enviado la confirmación por correo.</div>}
+      {nuevo && <div className="rounded-lg bg-accent-soft p-4 text-sm text-accent">Pedido recibido. Te hemos enviado la confirmación por correo.</div>}
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h1 className="text-2xl font-semibold">{order.kind === "muestra" ? "Muestra gratuita" : "Pedido"} {order.id}</h1>
+        <h1 className="text-3xl font-semibold">{order.kind === "muestra" ? "Muestra gratuita" : "Pedido"} {order.id}</h1>
         <StatusPill status={order.status} />
       </div>
       <p className="text-sm text-muted">{new Date(order.created_at).toLocaleString("es-ES")} · {order.clinic}</p>

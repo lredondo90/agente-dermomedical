@@ -27,7 +27,7 @@ export const DEFAULT_PRICING: PricingSettings = {
   freeShippingFromCents: 15000,
 };
 
-export type PricedLine = { productId: number; name: string; quantity: number; unitCents: number };
+export type PricedLine = { productId: number; name: string; quantity: number; unitCents: number; imageUrl?: string | null };
 
 export function discountPct(subtotalCents: number, tiers: VolumeTier[]): number {
   const pct = tiers

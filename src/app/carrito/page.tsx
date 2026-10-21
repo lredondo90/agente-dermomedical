@@ -7,8 +7,8 @@ export const dynamic = "force-dynamic";
 export default async function CarritoPage() {
   const session = await getSession();
   return (
-    <div className="mx-auto max-w-3xl space-y-4">
-      <h1 className="text-2xl font-semibold">Carrito</h1>
+    <div className="space-y-8">
+      <h1 className="text-4xl font-semibold">Carrito</h1>
       {session?.kind === "customer" ? (
         <CartView />
       ) : (

@@ -7,7 +7,7 @@ export default function EntrarPage() {
   const [state, action, pending] = useActionState<FormState, FormData>(requestLogin, {});
   return (
     <div className="mx-auto max-w-md space-y-4">
-      <h1 className="text-2xl font-semibold">Entrar</h1>
+      <h1 className="text-3xl font-semibold">Entrar</h1>
       <p className="text-muted">Te enviamos un enlace a tu correo. No necesitas contraseña.</p>
       <form action={action} className="card space-y-3">
         <label className="label" htmlFor="email">Correo profesional</label>

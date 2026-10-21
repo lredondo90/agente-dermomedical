@@ -1,0 +1,46 @@
+name: Fotos de producto
+
+# Cuando cambia un catálogo, descarga las fotos que falten y las guarda en el repositorio (public/productos).
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/catalogos/**"
+      - "scripts/descargar-imagenes.mjs"
+      - ".github/workflows/imagenes.yml"
+  pull_request:
+    paths:
+      - "data/catalogos/**"
+      - "scripts/descargar-imagenes.mjs"
+      - ".github/workflows/imagenes.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  descargar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # En una PR, trabajar sobre su rama para poder guardar las fotos en ella.
+          ref: ${{ github.head_ref || github.ref_name }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: node scripts/descargar-imagenes.mjs
+      - name: Guardar fotos nuevas
+        run: |
+          git add public/productos
+          if git diff --cached --quiet; then
+            echo "No hay fotos nuevas"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898699+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Descargar fotos de producto"
+          git push

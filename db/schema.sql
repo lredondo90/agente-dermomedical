@@ -21,6 +21,9 @@ create table if not exists products (
   updated_at timestamptz not null default now()
 );
 
+-- Foto del producto: ruta local (/productos/...) si se descargó, si no la URL original del fabricante.
+alter table products add column if not exists image_url text;
+
 create table if not exists customers (
   id serial primary key,
   name text not null,

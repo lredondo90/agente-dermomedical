@@ -2,7 +2,7 @@ import Link from "next/link";
 import { euros } from "@/lib/pricing";
 import { getSession } from "@/lib/session";
 import { getPricing, listLines, listProducts } from "@/lib/store";
-import { AddButton } from "./AddButton";
+import { ProductCard } from "@/components/ProductCard";
 
 export const dynamic = "force-dynamic";
 
@@ -15,56 +15,71 @@ export default async function CatalogoPage({ searchParams }: { searchParams: Pro
     getSession(),
   ]);
   const loggedIn = session?.kind === "customer";
+  const current = lines.find((l) => l.id === linea);
   const byLine = lines
     .map((l) => ({ ...l, products: products.filter((p) => p.line_id === l.id) }))
     .filter((l) => l.products.length > 0);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-10">
       {bienvenida && (
-        <div className="card border-accent bg-accent-soft text-sm">
+        <div className="rounded-lg bg-accent-soft p-4 text-sm text-accent">
           Ya estás dado de alta. Si pediste la muestra gratuita, la preparamos y te avisamos cuando salga.
         </div>
       )}
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold">Catálogo profesional</h1>
-          <p className="text-sm text-muted">
-            Precios sin IVA.{" "}
-            {pricing.tiers.map((t) => `${t.pct} % desde ${euros(t.minCents)}`).join(" · ")}
-          </p>
+      <header className="space-y-3">
+        <p className="eyebrow">Catálogo profesional</p>
+        <h1 className="text-4xl leading-[1.08] font-semibold md:text-5xl">{current ? current.name : "Todos los productos"}</h1>
+        <p className="max-w-2xl text-muted">
+          {current ? current.focus : "Peelings bioquímicos, cócteles, cremas y tratamientos domiciliarios."}
+        </p>
+        <div className="flex flex-wrap gap-x-6 gap-y-1 pt-1 text-sm text-subtle">
+          <span>Precios sin IVA</span>
+          {pricing.tiers.map((t) => (
+            <span key={t.pct}>−{t.pct} % desde {euros(t.minCents)}</span>
+          ))}
+          {pricing.freeShippingFromCents > 0 && <span>Envío gratis desde {euros(pricing.freeShippingFromCents)}</span>}
         </div>
-        <div className="flex flex-wrap gap-2 text-sm">
-          <Link href="/catalogo" className={!linea ? "btn" : "btn-ghost"}>Todas</Link>
+      </header>
+
+      <nav className="sticky top-16 z-10 -mx-4 border-b border-line bg-white/90 px-4 backdrop-blur-md">
+        <div className="flex gap-1 overflow-x-auto py-3 [scrollbar-width:none]">
+          <Link href="/catalogo" className={`shrink-0 ${!linea ? "btn h-8 px-4" : "btn-ghost h-8 border-transparent px-4"}`}>Todas</Link>
           {lines.map((l) => (
-            <Link key={l.id} href={`/catalogo?linea=${l.id}`} className={linea === l.id ? "btn" : "btn-ghost"}>{l.name}</Link>
+            <Link
+              key={l.id}
+              href={`/catalogo?linea=${l.id}`}
+              className={`shrink-0 ${linea === l.id ? "btn h-8 px-4" : "btn-ghost h-8 border-transparent px-4"}`}
+            >
+              {l.name}
+            </Link>
           ))}
         </div>
-      </div>
+      </nav>
+
       {!loggedIn && (
-        <p className="text-sm text-muted">
-          Para hacer pedidos, <Link href="/alta" className="underline">date de alta</Link> o <Link href="/entrar" className="underline">entra</Link>.
-        </p>
+        <div className="flex flex-wrap items-center justify-between gap-4 rounded-lg bg-soft p-5">
+          <p className="text-sm text-muted">Para hacer pedidos necesitas una cuenta profesional. La muestra gratuita va incluida en el alta.</p>
+          <div className="flex gap-2">
+            <Link href="/entrar" className="btn-ghost h-9 px-4">Entrar</Link>
+            <Link href="/alta" className="btn h-9 px-4">Alta profesional</Link>
+          </div>
+        </div>
       )}
+
       {byLine.map((l) => (
-        <section key={l.id} className="space-y-3">
-          <h2 className="text-lg font-semibold">{l.name} <span className="text-sm font-normal text-muted">· {l.focus}</span></h2>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <section key={l.id} className="space-y-6">
+          {!current && (
+            <div className="flex items-baseline justify-between gap-4 border-b border-line pb-3">
+              <h2 className="text-2xl font-semibold">
+                {l.name} <span className="text-base font-normal text-subtle">· {l.focus}</span>
+              </h2>
+              <Link href={`/catalogo?linea=${l.id}`} className="shrink-0 text-sm text-accent hover:underline">Ver línea ›</Link>
+            </div>
+          )}
+          <div className="grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3 lg:grid-cols-4">
             {l.products.map((p) => (
-              <article key={p.id} className="card flex flex-col gap-2">
-                <div className="flex items-start justify-between gap-2">
-                  <h3 className="font-medium">{p.name}</h3>
-                  {p.professional && <span className="shrink-0 rounded bg-accent-soft px-2 py-0.5 text-xs text-accent">Uso profesional</span>}
-                </div>
-                <div className="text-xs text-muted">
-                  {p.format}
-                  {p.source_url && <> · <a href={p.source_url} target="_blank" rel="noreferrer" className="underline">ficha</a></>}
-                </div>
-                <div className="mt-auto flex items-center justify-between">
-                  <span className="font-semibold">{p.price_cents != null ? euros(p.price_cents) : <span className="text-sm font-normal text-muted">Precio próximamente</span>}</span>
-                  {p.price_cents != null && loggedIn && <AddButton productId={p.id} />}
-                </div>
-              </article>
+              <ProductCard key={p.id} product={p} canOrder={loggedIn} />
             ))}
           </div>
         </section>

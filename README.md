@@ -53,3 +53,9 @@ La marca se elige con variables de entorno (`BRAND_NAME`, `BRAND_OWNER`, `BRAND_
 `data/catalogos/larimedical.json` se sacó de la web pública de Larimide el 21/10/2026. Al arrancar se actualizan nombres y líneas,
 pero nunca se pisan los precios ni los productos desactivados en el panel. La línea de limpiadores solo tiene un producto
 porque su página no se pudo leer; se pueden añadir al JSON.
+
+## Diseño
+
+El aspecto de la web sigue `DESIGN.md` (lenguaje visual tipo DJI, añadido con `npx getdesign@latest add dji`):
+lienzo blanco, letra Open Sans, un único azul para las acciones y botones redondeados. Los colores están
+centralizados en `src/app/globals.css`, así que cambiar de estilo para otro cliente solo toca ese fichero.
