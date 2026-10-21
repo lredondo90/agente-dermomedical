@@ -4,7 +4,7 @@ import { one, query } from "../db";
 import { PROVINCES } from "../provinces";
 import { logEvent } from "../store";
 import { parseCsv, provinceFromAddress } from "./text";
-export { isInactive } from "./text";
+export { cityFromAddress, isInactive } from "./text";
 
 export type Prospect = {
   id: number;

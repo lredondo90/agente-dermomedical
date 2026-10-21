@@ -1,9 +1,10 @@
 import { requireAdmin } from "@/lib/session";
-import { isInactive, listProspects, PROSPECT_STATUSES } from "@/lib/agent/prospects";
+import { cityFromAddress, isInactive, listProspects, PROSPECT_STATUSES, type Prospect } from "@/lib/agent/prospects";
 import { SubmitButton } from "../SubmitButton";
 import { discardProspects, importClinics, markLettersSent, prepareLetters, resetProspects, searchClinics } from "../actions";
 import { PanelNav } from "../../PanelNav";
 import { Flash } from "../Flash";
+import { SelectAll } from "./SelectAll";
 
 export const dynamic = "force-dynamic";
 
@@ -15,17 +16,52 @@ const LABEL: Record<string, string> = {
   descartado: "Descartada",
 };
 
-export default async function ClinicasPage({ searchParams }: { searchParams: Promise<{ msg?: string; estado?: string; orden?: string; activas?: string }> }) {
-  await requireAdmin();
-  const { msg, estado, orden, activas } = await searchParams;
-  const all = await listProspects(estado || undefined, orden === "nota" ? "nota" : "recientes");
-  const now = Date.now();
-  const prospects = activas ? all.filter((p) => !isInactive(p, now)) : all;
-  const hidden = all.length - prospects.length;
-  const link = (extra: Record<string, string | undefined>) => {
-    const q = new URLSearchParams(Object.entries({ estado, orden, activas, ...extra }).filter(([, v]) => v) as [string, string][]);
-    return `/panel/agente/clinicas${q.size ? `?${q}` : ""}`;
+const ORDERS = {
+  nota: "Nota de Google (mejor primero)",
+  opiniones: "Nº de opiniones (más primero)",
+  recientes: "Añadidas más recientes",
+  nombre: "Nombre de la clínica",
+} as const;
+type Order = keyof typeof ORDERS;
+
+const MIN_RATINGS = ["3", "3.5", "4", "4.5"];
+
+type Params = { msg?: string; estado?: string; orden?: string; ciudad?: string | string[]; nota?: string; actividad?: string };
+
+const cityOf = (p: Prospect) => cityFromAddress(p.address) ?? p.province ?? "Sin ciudad";
+
+function compare(order: Order) {
+  return (a: Prospect, b: Prospect) => {
+    if (order === "nota") return (Number(b.rating ?? -1) - Number(a.rating ?? -1)) || ((b.rating_count ?? -1) - (a.rating_count ?? -1));
+    if (order === "opiniones") return (b.rating_count ?? -1) - (a.rating_count ?? -1);
+    if (order === "nombre") return a.clinic.localeCompare(b.clinic, "es");
+    return b.id - a.id;
   };
+}
+
+export default async function ClinicasPage({ searchParams }: { searchParams: Promise<Params> }) {
+  await requireAdmin();
+  const params = await searchParams;
+  const { msg, estado, nota, actividad } = params;
+  const order: Order = params.orden && params.orden in ORDERS ? (params.orden as Order) : "nota";
+  const cities = [params.ciudad ?? []].flat().filter(Boolean);
+  const now = Date.now();
+
+  const all = await listProspects(estado || undefined);
+  const cityCounts = new Map<string, number>();
+  for (const p of all) cityCounts.set(cityOf(p), (cityCounts.get(cityOf(p)) ?? 0) + 1);
+  const cityList = [...cityCounts].sort((a, b) => a[0].localeCompare(b[0], "es"));
+
+  const prospects = all
+    .filter((p) => !cities.length || cities.includes(cityOf(p)))
+    .filter((p) => !nota || Number(p.rating ?? 0) >= Number(nota))
+    .filter((p) => actividad !== "activas" || !isInactive(p, now))
+    .filter((p) => actividad !== "inactivas" || isInactive(p, now))
+    .sort(compare(order));
+  const groups = new Map<string, Prospect[]>();
+  for (const p of prospects) groups.set(cityOf(p), [...(groups.get(cityOf(p)) ?? []), p]);
+  const groupList = [...groups].sort((a, b) => a[0].localeCompare(b[0], "es"));
+  const filtered = cities.length > 0 || !!nota || !!actividad || !!estado;
 
   return (
     <div className="space-y-6">
@@ -54,58 +90,109 @@ export default async function ClinicasPage({ searchParams }: { searchParams: Pro
         </form>
       </div>
 
-      <nav className="flex flex-wrap gap-2 text-sm">
-        <a href={link({ estado: undefined })} className={!estado ? "btn-soft" : "btn-ghost"}>Todas</a>
-        {PROSPECT_STATUSES.map((s) => (
-          <a key={s} href={link({ estado: s })} className={estado === s ? "btn-soft" : "btn-ghost"}>{LABEL[s]}</a>
-        ))}
-      </nav>
-      <div className="flex flex-wrap gap-2 text-sm">
-        <a href={link({ orden: orden === "nota" ? undefined : "nota" })} className={orden === "nota" ? "btn-soft" : "btn-ghost"}>Ordenar por opiniones de Google</a>
-        <a href={link({ activas: activas ? undefined : "1" })} className={activas ? "btn-soft" : "btn-ghost"}>
-          Ocultar sin actividad{activas && hidden ? ` (${hidden} ocultas)` : ""}
-        </a>
-      </div>
+      <form method="get" className="card space-y-4 text-sm">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h2 className="text-lg font-semibold">Filtrar y ordenar</h2>
+          {filtered && <a href="/panel/agente/clinicas" className="underline">Quitar filtros</a>}
+        </div>
+        <div>
+          <div className="label">Ciudades {cities.length ? `(${cities.length} elegidas)` : "(todas)"}</div>
+          <div className="flex max-h-40 flex-wrap gap-x-4 gap-y-1 overflow-y-auto">
+            {cityList.map(([c, n]) => (
+              <label key={c} className="inline-flex items-center gap-1.5">
+                <input type="checkbox" name="ciudad" value={c} defaultChecked={cities.includes(c)} /> {c} <span className="text-muted">({n})</span>
+              </label>
+            ))}
+            {cityList.length === 0 && <span className="text-muted">Aún no hay clínicas.</span>}
+          </div>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-4">
+          <label>
+            <span className="label">Ordenar por</span>
+            <select name="orden" defaultValue={order} className="input">
+              {Object.entries(ORDERS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+            </select>
+          </label>
+          <label>
+            <span className="label">Nota mínima</span>
+            <select name="nota" defaultValue={nota ?? ""} className="input">
+              <option value="">Cualquiera</option>
+              {MIN_RATINGS.map((r) => <option key={r} value={r}>★ {r.replace(".", ",")} o más</option>)}
+            </select>
+          </label>
+          <label>
+            <span className="label">Actividad en Google</span>
+            <select name="actividad" defaultValue={actividad ?? ""} className="input">
+              <option value="">Todas</option>
+              <option value="activas">Solo activas</option>
+              <option value="inactivas">Solo inactivas</option>
+            </select>
+          </label>
+          <label>
+            <span className="label">Estado</span>
+            <select name="estado" defaultValue={estado ?? ""} className="input">
+              <option value="">Todos</option>
+              {PROSPECT_STATUSES.map((st) => <option key={st} value={st}>{LABEL[st]}</option>)}
+            </select>
+          </label>
+        </div>
+        <button className="btn">Aplicar</button>
+      </form>
 
-      <form className="space-y-3">
-        <div className="flex flex-wrap gap-2 text-sm">
+      <form className="space-y-4">
+        <div className="sticky top-0 z-10 flex flex-wrap items-center gap-2 border-b border-card-border bg-white py-3 text-sm">
+          <span className="mr-2 font-semibold">{prospects.length} clínicas en {groupList.length} ciudades</span>
+          <SelectAll label="Marcar todas" />
+          <span className="flex-1" />
           <button formAction={prepareLetters} className="btn">Preparar cartas de las marcadas</button>
           <button formAction={markLettersSent} className="btn-ghost">Marcar como enviadas</button>
           <button formAction={discardProspects} className="btn-ghost">Descartar</button>
           <button formAction={resetProspects} className="btn-ghost">Volver a «nueva»</button>
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="text-left text-muted">
-              <tr><th className="py-2"></th><th>Clínica</th><th>Dirección</th><th>Teléfono / web</th><th>Google</th><th>Origen</th><th>Estado</th><th>Código</th></tr>
-            </thead>
-            <tbody className="divide-y divide-line">
-              {prospects.map((p) => (
-                <tr key={p.id} className={isInactive(p, now) ? "text-muted" : undefined}>
-                  <td className="py-2 pr-2"><input type="checkbox" name="id" value={p.id} disabled={p.status === "registrado"} /></td>
-                  <td>{p.clinic}{p.name && <div className="text-xs text-muted">{p.name}</div>}</td>
-                  <td className="max-w-xs">{p.address ?? <span className="text-muted">Sin dirección</span>}<div className="text-xs text-muted">{p.province}</div></td>
-                  <td>{p.phone}{p.website && <div className="text-xs"><a href={p.website} className="underline" target="_blank" rel="noreferrer">web</a></div>}</td>
-                  <td className="whitespace-nowrap">
-                    {p.rating_count == null ? (
-                      <span className="text-muted">—</span>
-                    ) : p.rating_count === 0 ? (
-                      "Sin opiniones"
-                    ) : (
-                      <>★ {Number(p.rating).toFixed(1)} <span className="text-xs">({p.rating_count})</span></>
-                    )}
-                    {p.last_review_at && <div className="text-xs">Última: {new Date(p.last_review_at).toLocaleDateString("es-ES", { month: "short", year: "numeric" })}</div>}
-                    {isInactive(p, now) && <div className="text-xs">Sin actividad</div>}
-                  </td>
-                  <td>{p.source}</td>
-                  <td>{LABEL[p.status] ?? p.status}</td>
-                  <td className="font-mono text-xs">{p.code}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {prospects.length === 0 && <p className="py-4 text-sm text-muted">No hay clínicas en esta lista.</p>}
-        </div>
+        <p className="text-xs text-muted">
+          <span className="mr-1 inline-block h-3 w-3 rounded-sm border border-amber-300 bg-amber-50 align-middle" /> Inactiva en Google: sin opiniones o con la última de hace más de un año.
+        </p>
+        {groupList.map(([city, rows]) => (
+          <section key={city} className="overflow-x-auto">
+            <div className="flex flex-wrap items-center gap-3 bg-fog px-3 py-2">
+              <h3 className="font-semibold">{city}</h3>
+              <span className="text-sm text-muted">{rows.length} {rows.length === 1 ? "clínica" : "clínicas"}</span>
+              <SelectAll group={city} label="Marcar esta ciudad" />
+            </div>
+            <table className="w-full min-w-[860px] table-fixed text-sm">
+              <thead className="text-left text-muted">
+                <tr><th className="w-8 py-2"></th><th className="w-[22%]">Clínica</th><th className="w-[30%]">Dirección</th><th className="w-[13%]">Teléfono / web</th><th className="w-[17%]">Google</th><th className="w-[10%]">Estado</th><th>Código</th></tr>
+              </thead>
+              <tbody className="divide-y divide-line">
+                {rows.map((p) => {
+                  const inactive = isInactive(p, now);
+                  return (
+                    <tr key={p.id} className={inactive ? "bg-amber-50" : undefined}>
+                      <td className="py-2 pl-2 pr-2"><input type="checkbox" name="id" value={p.id} data-group={city} disabled={p.status === "registrado"} /></td>
+                      <td className="pr-3">{p.clinic}{p.name && <div className="text-xs text-muted">{p.name}</div>}</td>
+                      <td className="pr-3">{p.address ?? <span className="text-muted">Sin dirección</span>}</td>
+                      <td>{p.phone}{p.website && <div className="text-xs"><a href={p.website} className="underline" target="_blank" rel="noreferrer">web</a></div>}</td>
+                      <td className="whitespace-nowrap">
+                        {p.rating_count == null ? (
+                          <span className="text-muted">—</span>
+                        ) : p.rating_count === 0 ? (
+                          "Sin opiniones"
+                        ) : (
+                          <>★ {Number(p.rating).toFixed(1).replace(".", ",")} <span className="text-xs text-muted">({p.rating_count})</span></>
+                        )}
+                        {p.last_review_at && <div className="text-xs text-muted">Última: {new Date(p.last_review_at).toLocaleDateString("es-ES", { month: "short", year: "numeric" })}</div>}
+                        {inactive && <span className="mt-1 inline-block rounded-full bg-amber-100 px-2 text-xs text-amber-900">Inactiva en Google</span>}
+                      </td>
+                      <td>{LABEL[p.status] ?? p.status}</td>
+                      <td className="font-mono text-xs">{p.code}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </section>
+        ))}
+        {prospects.length === 0 && <p className="py-4 text-sm text-muted">No hay clínicas con estos filtros.</p>}
       </form>
     </div>
   );

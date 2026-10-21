@@ -96,3 +96,10 @@ export function isInactive(p: { source: string; rating_count: number | null; las
   if (p.rating_count === 0 || !p.last_review_at) return true;
   return now - new Date(p.last_review_at).getTime() > 365 * 24 * 3600 * 1000;
 }
+
+// Ciudad a partir de una dirección española ("C. de Colón, 1, 46004 Valencia, España" -> "Valencia").
+export function cityFromAddress(address: string | null | undefined): string | null {
+  if (!address) return null;
+  const m = address.match(/\b\d{5}\s+([^,]+)/);
+  return m ? m[1].trim() : null;
+}
