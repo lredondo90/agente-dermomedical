@@ -3,7 +3,7 @@
 APP de pedidos para dermatólogos, preparada para cualquier marca de dermocosmética. Los dermatólogos se dan de alta
 (con sus consentimientos de correo y WhatsApp), reciben una muestra gratuita y hacen pedidos con descuento por volumen.
 La primera instalación vende el catálogo Larimedical. El distribuidor lo gestiona todo desde `/panel`.
-Es la base sobre la que trabajará el agente de IA (paso 3).
+Encima funciona un agente de IA que busca clínicas, les prepara cartas con QR, hace el seguimiento y contesta por correo y WhatsApp (ver [docs/agente.md](docs/agente.md)).
 
 ## Qué incluye
 
@@ -17,9 +17,11 @@ Es la base sobre la que trabajará el agente de IA (paso 3).
 | Mis pedidos | `/pedidos` | Historial, detalle, datos de transferencia y «Repetir este pedido» |
 | Mi cuenta | `/cuenta` | Darse de baja de correo o WhatsApp al momento |
 | Panel | `/panel` | Resumen, pedidos y su estado, clientes con sus consentimientos, precios y descuentos |
+| Agente | `/panel/agente` | Reglas del agente, conexiones, conversaciones y las que necesitan a una persona |
+| Clínicas y cartas | `/panel/agente/clinicas` | Búsqueda en Google Maps, importación de contactos (CSV) y cartas con QR para imprimir |
 | Legal | `/privacidad`, `/aviso-legal`, `/condiciones` | Borradores para revisar con un abogado |
 
-Cada alta, consentimiento, muestra, pedido y cambio de estado queda en la tabla `events`, que también usará el agente.
+Cada alta, consentimiento, muestra, pedido, cambio de estado y decisión del agente queda en la tabla `events`.
 
 ## Arrancar en local
 
@@ -29,7 +31,7 @@ Requiere Node 20 o superior.
 npm install
 cp .env.example .env.local   # pon al menos ADMIN_PASSWORD
 npm run dev                  # http://localhost:3000
-npm test                     # pruebas de precios y descuentos
+npm test                     # pruebas de precios, descuentos y utilidades del agente
 ```
 
 Sin `DATABASE_URL` usa una base de datos local en `.data/` (PGlite), sin instalar nada. Sin `RESEND_API_KEY` los correos

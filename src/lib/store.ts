@@ -33,6 +33,8 @@ export type Customer = {
   consent_at: string | null;
   source: string;
   status: string;
+  needs_human: boolean;
+  prospect_code: string | null;
   created_at: string;
 };
 export type Order = {

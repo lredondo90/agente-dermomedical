@@ -8,6 +8,7 @@ import { PROVINCES } from "@/lib/provinces";
 import { sendMail } from "@/lib/mail";
 import { getSession, requireAdmin, requireCustomer, setSession } from "@/lib/session";
 import * as store from "@/lib/store";
+import { linkProspect } from "@/lib/agent/prospects";
 
 export type FormState = { error?: string; info?: string; devLink?: string };
 
@@ -30,14 +31,17 @@ export async function register(_: FormState, form: FormData): Promise<FormState>
   if (!parsed.success) return { error: parsed.error.issues[0].message };
   const d = parsed.data;
   const consentWhatsapp = form.get("consentWhatsapp") === "on";
+  // Las cartas llevan un QR a /alta?origen=carta&c=<código>: el formulario lo devuelve como "carta:<código>".
+  const [source, letterCode] = String(form.get("source") || "alta-web").slice(0, 60).split(":");
   if (consentWhatsapp && !d.phone) return { error: "Para recibir WhatsApp necesitamos tu móvil" };
   const { customer, created } = await store.registerCustomer({
     ...d,
     consentEmail: form.get("consentEmail") === "on",
     consentWhatsapp,
     wantsSample: form.get("wantsSample") === "on",
-    source: String(form.get("source") || "alta-web"),
+    source,
   });
+  if (created && letterCode) await linkProspect(letterCode, customer.id);
   if (!created) return { error: "Ese correo ya está dado de alta. Entra con tu correo para recibir un enlace de acceso." };
   await setSession({ kind: "customer", customerId: customer.id });
   redirect("/catalogo?bienvenida=1");

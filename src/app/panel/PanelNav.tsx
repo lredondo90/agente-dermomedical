@@ -7,6 +7,8 @@ export function PanelNav() {
       <Link href="/panel/clientes" className="btn-ghost">Clientes</Link>
       <Link href="/panel/productos" className="btn-ghost">Productos y precios</Link>
       <Link href="/panel/ajustes" className="btn-ghost">Descuentos y envío</Link>
+      <Link href="/panel/agente" className="btn-ghost">Agente</Link>
+      <Link href="/panel/agente/clinicas" className="btn-ghost">Clínicas y cartas</Link>
     </nav>
   );
 }
