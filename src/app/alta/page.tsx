@@ -4,8 +4,9 @@ import { RegisterForm } from "./RegisterForm";
 
 export const dynamic = "force-dynamic";
 
-export default async function AltaPage({ searchParams }: { searchParams: Promise<{ origen?: string }> }) {
-  const { origen } = await searchParams;
+export default async function AltaPage({ searchParams }: { searchParams: Promise<{ origen?: string; c?: string }> }) {
+  const { origen, c } = await searchParams;
+  const source = origen === "carta" && c && /^[A-Z0-9]{4,12}$/i.test(c) ? `carta:${c}` : origen;
   const lines = await listLines();
   return (
     <div className="mx-auto max-w-2xl space-y-6">
@@ -13,7 +14,7 @@ export default async function AltaPage({ searchParams }: { searchParams: Promise
         <h1 className="text-3xl font-semibold">Alta profesional</h1>
         <p className="text-muted">Para dermatólogos y consultas médicas. Te enviamos una muestra gratuita al darte de alta.</p>
       </div>
-      <RegisterForm lines={lines.map(({ id, name }) => ({ id, name }))} source={origen} brandName={brand.name} />
+      <RegisterForm lines={lines.map(({ id, name }) => ({ id, name }))} source={source} brandName={brand.name} />
     </div>
   );
 }

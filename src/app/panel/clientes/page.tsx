@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { euros } from "@/lib/pricing";
 import { requireAdmin } from "@/lib/session";
 import { listCustomers } from "@/lib/store";
@@ -19,7 +20,7 @@ export default async function ClientesPage() {
         <tbody className="divide-y divide-line">
           {customers.map((c) => (
             <tr key={c.id}>
-              <td className="py-2">{c.clinic}</td>
+              <td className="py-2"><Link href={`/panel/agente/conversacion/${c.id}`} className="font-medium hover:underline">{c.clinic}</Link>{c.needs_human && <span className="ml-2 rounded-full bg-amber-50 px-2 text-xs text-amber-800">Requiere persona</span>}</td>
               <td>{c.name}<div className="text-xs text-muted">{c.email}{c.phone && ` · ${c.phone}`}</div></td>
               <td>{c.province}</td>
               <td>{c.source}</td>

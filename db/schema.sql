@@ -91,3 +91,47 @@ create table if not exists settings (
   key text primary key,
   value jsonb not null
 );
+
+-- --- Paso 3: el agente ---
+
+-- Clínicas encontradas por el agente (Google Maps) o importadas por el distribuidor. Son posibles clientes SIN
+-- consentimiento: solo se les escribe por carta postal (con un código QR personal), nunca correo ni WhatsApp.
+create table if not exists prospects (
+  id serial primary key,
+  clinic text not null,
+  name text,
+  address text,
+  province text,
+  phone text,
+  website text,
+  email text,
+  -- google-maps | csv | manual
+  source text not null default 'manual',
+  place_id text unique,
+  -- nuevo | carta-preparada | carta-enviada | registrado | descartado
+  status text not null default 'nuevo',
+  -- Código del QR de la carta: /alta?origen=carta&c=<code>
+  code text not null unique,
+  customer_id int references customers(id),
+  notes text,
+  created_at timestamptz not null default now(),
+  letter_at timestamptz
+);
+
+-- Conversaciones por correo y WhatsApp, solo con clientes registrados.
+create table if not exists messages (
+  id serial primary key,
+  customer_id int not null references customers(id),
+  channel text not null, -- email | whatsapp | panel
+  direction text not null, -- entrada | salida
+  author text not null, -- cliente | agente | humano
+  subject text,
+  body text not null,
+  -- Clave para no repetir seguimientos automáticos (p. ej. muestra-7:12)
+  dedupe_key text unique,
+  status text not null default 'ok', -- ok | sin-enviar | error
+  created_at timestamptz not null default now()
+);
+
+alter table customers add column if not exists needs_human boolean not null default false;
+alter table customers add column if not exists prospect_code text;
