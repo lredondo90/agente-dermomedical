@@ -1,15 +1,24 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { brand } from "./company";
 
 type Catalog = {
   lines: { id: string; name: string; focus: string }[];
-  products: { slug: string; line: string; name: string; format: string; professional: boolean; url: string }[];
+  products: { slug: string; line: string; name: string; format: string; professional: boolean; url: string; image?: string }[];
 };
 
+const catalogId = brand.catalog.replace(/[^a-z0-9-]/gi, "");
+
 function loadCatalog(): Catalog {
-  const file = path.join(process.cwd(), "data", "catalogos", `${brand.catalog.replace(/[^a-z0-9-]/gi, "")}.json`);
+  const file = path.join(process.cwd(), "data", "catalogos", `${catalogId}.json`);
   return JSON.parse(readFileSync(file, "utf8"));
+}
+
+// Usa la foto descargada en public/productos (scripts/descargar-imagenes.mjs) y, si aún no está, la del fabricante.
+function imageFor(p: Catalog["products"][number]) {
+  const local = `/productos/${catalogId}/${p.slug}.webp`;
+  if (existsSync(path.join(process.cwd(), "public", local))) return local;
+  return p.image ?? null;
 }
 
 type Run = (text: string, params?: unknown[]) => Promise<unknown>;
@@ -26,10 +35,10 @@ export async function seedCatalog(run: Run) {
   }
   for (const p of catalog.products) {
     await run(
-      `insert into products (slug, line_id, name, format, professional, source_url) values ($1, $2, $3, $4, $5, $6)
+      `insert into products (slug, line_id, name, format, professional, source_url, image_url) values ($1, $2, $3, $4, $5, $6, $7)
        on conflict (slug) do update set line_id = excluded.line_id, name = excluded.name, format = excluded.format,
-         professional = excluded.professional, source_url = excluded.source_url`,
-      [p.slug, p.line, p.name, p.format, p.professional, p.url],
+         professional = excluded.professional, source_url = excluded.source_url, image_url = excluded.image_url`,
+      [p.slug, p.line, p.name, p.format, p.professional, p.url, imageFor(p)],
     );
   }
 }

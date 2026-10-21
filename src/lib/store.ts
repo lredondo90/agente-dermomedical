@@ -13,6 +13,7 @@ export type Product = {
   format: string;
   professional: boolean;
   source_url: string | null;
+  image_url: string | null;
   price_cents: number | null;
   active: boolean;
 };
@@ -72,6 +73,10 @@ export async function listProducts(opts: { lineId?: string; includeInactive?: bo
     `select * from products where ($1::text is null or line_id = $1) and ($2 or active) order by line_id, name`,
     [opts.lineId ?? null, opts.includeInactive ?? false],
   );
+}
+
+export async function getProductBySlug(slug: string) {
+  return one<Product>("select * from products where slug = $1 and active", [slug]);
 }
 
 export async function updateProduct(id: number, priceCents: number | null, active: boolean) {
@@ -210,7 +215,7 @@ export async function quoteCart(items: CartItem[], province?: string | null) {
       unavailable.push(p?.name ?? `Producto ${item.productId}`);
       continue;
     }
-    lines.push({ productId: p.id, name: p.name, quantity: Math.min(item.quantity, 999), unitCents: p.price_cents });
+    lines.push({ productId: p.id, name: p.name, quantity: Math.min(item.quantity, 999), unitCents: p.price_cents, imageUrl: p.image_url });
   }
   return { ...quote(lines, await getPricing(), vatPctFor(province)), unavailable };
 }
