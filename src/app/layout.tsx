@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
+import { Open_Sans } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 import { brand, company } from "@/lib/company";
 import { getSession } from "@/lib/session";
+
+const openSans = Open_Sans({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-open-sans" });
 
 export const metadata: Metadata = {
   title: `${brand.name} para dermatólogos · ${company.name}`,
@@ -12,17 +15,17 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const session = await getSession();
   return (
-    <html lang="es">
-      <body className="min-h-screen antialiased">
+    <html lang="es" className={openSans.variable}>
+      <body className="flex min-h-screen flex-col antialiased">
         {process.env.DEMO_PRICES === "1" && (
-          <div className="bg-amber-100 px-4 py-1 text-center text-xs text-amber-900">
+          <div className="bg-announce px-4 py-2 text-center text-xs text-muted">
             Demo: los precios son de ejemplo y los datos se borran cuando la web se reinicia.
           </div>
         )}
-        <header className="border-b border-line bg-white">
-          <nav className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3 text-sm">
-            <Link href="/" className="mr-auto font-semibold">
-              {brand.name} <span className="font-normal text-muted">· {company.name}</span>
+        <header className="sticky top-0 z-10 border-b border-line bg-white/95 backdrop-blur">
+          <nav className="mx-auto flex min-h-16 max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3 text-sm text-[#303233]">
+            <Link href="/" className="mr-auto text-base font-semibold text-foreground">
+              {brand.name} <span className="font-normal text-subtle">· {company.name}</span>
             </Link>
             <Link href="/catalogo">Catálogo</Link>
             <Link href="/carrito">Carrito</Link>
@@ -33,17 +36,24 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             ) : (
               <>
                 <Link href="/entrar">Entrar</Link>
-                <Link href="/alta" className="btn">Alta profesional</Link>
+                <Link href="/alta" className="btn h-8 px-4">Alta profesional</Link>
               </>
             )}
           </nav>
         </header>
-        <main className="mx-auto max-w-6xl px-4 py-8">{children}</main>
-        <footer className="mx-auto max-w-6xl px-4 py-8 text-xs text-muted">
-          {company.name}, distribuidor de {brand.name} · Venta exclusiva a profesionales sanitarios ·{" "}
-          <Link href="/aviso-legal" className="underline">Aviso legal</Link> ·{" "}
-          <Link href="/privacidad" className="underline">Privacidad</Link> ·{" "}
-          <Link href="/condiciones" className="underline">Condiciones de venta</Link>
+        <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-10">{children}</main>
+        <footer className="bg-footer text-xs text-footer-link">
+          <div className="mx-auto max-w-6xl px-4 py-8">
+            <div className="border-b border-footer-line pb-4 text-sm font-medium text-white">
+              {company.name}, distribuidor de {brand.name}
+            </div>
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-4">
+              <span className="mr-auto">Venta exclusiva a profesionales sanitarios</span>
+              <Link href="/aviso-legal" className="hover:text-white">Aviso legal</Link>
+              <Link href="/privacidad" className="hover:text-white">Privacidad</Link>
+              <Link href="/condiciones" className="hover:text-white">Condiciones de venta</Link>
+            </div>
+          </div>
         </footer>
       </body>
     </html>

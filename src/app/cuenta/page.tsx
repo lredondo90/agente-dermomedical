@@ -8,7 +8,7 @@ export default async function CuentaPage() {
   const c = (await getCustomer(await requireCustomer()))!;
   return (
     <div className="mx-auto max-w-xl space-y-4">
-      <h1 className="text-2xl font-semibold">Mi cuenta</h1>
+      <h1 className="text-3xl font-semibold">Mi cuenta</h1>
       <div className="card text-sm">
         <div className="font-medium">{c.name}</div>
         <div>{c.clinic} · {c.province}</div>

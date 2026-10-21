@@ -10,7 +10,7 @@ export default async function ClientesPage() {
   const customers = await listCustomers();
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Clientes</h1>
+      <h1 className="text-3xl font-semibold">Clientes</h1>
       <PanelNav />
       <table className="w-full text-sm">
         <thead className="text-left text-muted">

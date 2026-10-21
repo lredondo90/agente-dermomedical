@@ -21,7 +21,7 @@ export default async function PanelPage() {
   ];
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Panel</h1>
+      <h1 className="text-3xl font-semibold">Panel</h1>
       <PanelNav />
       {d.unpriced > 0 && (
         <p className="card border-amber-300 bg-amber-50 text-sm">
@@ -52,10 +52,10 @@ export default async function PanelPage() {
               <td>
                 <form action={changeOrderStatus} className="flex gap-1">
                   <input type="hidden" name="id" value={o.id} />
-                  <select name="status" defaultValue={o.status} className="input py-1">
+                  <select name="status" defaultValue={o.status} className="input h-8 py-1">
                     {ORDER_STATUSES.map((s) => <option key={s} value={s}>{statusLabel(s)}</option>)}
                   </select>
-                  <button className="btn-ghost py-1">OK</button>
+                  <button className="btn-ghost h-8 px-3">OK</button>
                 </form>
               </td>
             </tr>

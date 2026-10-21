@@ -68,7 +68,7 @@ export function CartView() {
       <textarea id="notes" className="input" rows={2} maxLength={500} value={notes} onChange={(e) => setNotes(e.target.value)} />
       {error && <p className="text-sm text-red-700">{error}</p>}
       <button
-        className="btn"
+        className="btn h-12 px-8 text-base"
         disabled={pending || quote.lines.length === 0}
         onClick={() =>
           start(async () => {

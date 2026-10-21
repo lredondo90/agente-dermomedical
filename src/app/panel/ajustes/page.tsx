@@ -13,7 +13,7 @@ export default async function AjustesPage() {
   const pricing = await getPricing();
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Descuentos y envío</h1>
+      <h1 className="text-3xl font-semibold">Descuentos y envío</h1>
       <PanelNav />
       <form action={savePricingSettings} className="card max-w-xl space-y-4 text-sm">
         <div>

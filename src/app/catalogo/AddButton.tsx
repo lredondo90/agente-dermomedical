@@ -7,7 +7,7 @@ export function AddButton({ productId }: { productId: number }) {
   const [added, setAdded] = useState(false);
   return (
     <button
-      className="btn"
+      className="btn-soft"
       onClick={() => {
         addToCart(productId);
         setAdded(true);

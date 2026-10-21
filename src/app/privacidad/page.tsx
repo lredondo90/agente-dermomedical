@@ -3,8 +3,8 @@ import { company } from "@/lib/company";
 export default function Privacidad() {
   return (
     <article className="prose mx-auto max-w-2xl space-y-3 text-sm">
-      <h1 className="text-2xl font-semibold">Política de privacidad</h1>
-      <p className="rounded bg-amber-50 p-2">Borrador pendiente de revisión por un abogado.</p>
+      <h1 className="text-3xl font-semibold">Política de privacidad</h1>
+      <p className="rounded-lg bg-amber-50 p-3">Borrador pendiente de revisión por un abogado.</p>
       <p><strong>Responsable:</strong> {company.name}, {company.taxId}, {company.address}. Contacto: {company.email}.</p>
       <p><strong>Datos:</strong> nombre, número de colegiado, clínica, provincia, correo, móvil, datos de facturación y envío, pedidos y conversaciones con nuestro asistente.</p>
       <p><strong>Finalidades y bases legales:</strong> gestionar tu cuenta profesional y tus pedidos (ejecución del contrato); enviarte información comercial por correo o WhatsApp solo si lo has aceptado (consentimiento); verificar que eres profesional sanitario y atender incidencias (interés legítimo); facturación (obligación legal).</p>
