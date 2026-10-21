@@ -12,6 +12,12 @@ export function statusLabel(status: string) {
 }
 
 export function StatusPill({ status }: { status: string }) {
-  const tone = status === "cancelado" ? "bg-red-50 text-red-700" : status === "pendiente-pago" ? "bg-amber-50 text-amber-800" : "bg-accent-soft text-accent";
-  return <span className={`rounded-full px-2.5 py-0.5 text-xs ${tone}`}>{statusLabel(status)}</span>;
+  const tone =
+    status === "cancelado" ? "bg-red-50 text-danger" : status === "pendiente-pago" ? "bg-warn-soft text-warn" : "bg-accent-soft text-accent-strong";
+  return (
+    <span className={`chip ${tone}`}>
+      <span className="size-1.5 rounded-full bg-current" />
+      {statusLabel(status)}
+    </span>
+  );
 }

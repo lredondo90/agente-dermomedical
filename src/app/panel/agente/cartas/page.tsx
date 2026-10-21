@@ -22,7 +22,7 @@ export default async function CartasPage({ searchParams }: { searchParams: Promi
     <div>
       <style>{`
         @media print {
-          header, footer, nav, .no-print { display: none !important; }
+          header, footer, nav, aside, .no-print { display: none !important; }
           body { background: white; }
           .letter { break-after: page; border: 0 !important; margin: 0 !important; padding: 0 !important; }
         }
@@ -30,10 +30,10 @@ export default async function CartasPage({ searchParams }: { searchParams: Promi
       `}</style>
       <div className="no-print mb-6 flex flex-wrap items-center justify-between gap-3">
         <p className="text-sm text-muted">{letters.length} cartas. Imprímelas con Ctrl+P (o guárdalas en PDF para un servicio de envío postal) y después márcalas como enviadas.</p>
-        <a href="/panel/agente/clinicas?estado=carta-preparada" className="btn-ghost">Volver</a>
+        <a href="/panel/agente/clinicas?estado=carta-preparada" className="btn-ghost">← Volver</a>
       </div>
       {letters.map(({ p, url, qr }) => (
-        <article key={p.id} className="letter mx-auto mb-8 max-w-[210mm] space-y-6 border border-card-border bg-white p-12 text-[15px] leading-relaxed">
+        <article key={p.id} className="letter mx-auto mb-8 max-w-[210mm] space-y-6 rounded-2xl border border-card-border bg-white p-12 shadow-card text-[15px] leading-relaxed">
           <div className="flex justify-between gap-8 text-sm">
             <div>
               <b>{company.name}</b><br />{company.address}<br />{company.email}

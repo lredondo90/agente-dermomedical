@@ -25,7 +25,7 @@ export default async function ProductoPage({ params }: { params: Promise<{ slug:
   return (
     <div className="space-y-20">
       <div className="space-y-6">
-        <nav className="text-sm text-subtle">
+        <nav className="flex items-center gap-1.5 text-sm text-subtle">
           <Link href="/catalogo" className="hover:text-foreground">Catálogo</Link>
           {line && (
             <>
@@ -35,19 +35,19 @@ export default async function ProductoPage({ params }: { params: Promise<{ slug:
           )}
         </nav>
         <div className="grid gap-10 md:grid-cols-[1.2fr_1fr] lg:gap-16">
-          <ProductImage src={product.image_url} alt={product.name} priority />
-          <div className="space-y-6">
-            <div className="space-y-2">
+          <ProductImage src={product.image_url} alt={product.name} priority className="rounded-[28px] border border-card-border/70" />
+          <div className="space-y-6 md:pt-4">
+            <div className="space-y-3">
               {product.professional && <p className="eyebrow">Uso profesional en consulta</p>}
-              <h1 className="text-3xl leading-tight font-semibold">{product.name}</h1>
+              <h1 className="display text-4xl leading-[1.05] sm:text-5xl">{product.name}</h1>
               <p className="text-muted">{line?.name} · {line?.focus}</p>
             </div>
             <div className="text-sm">
-              <span className="rounded-full bg-fog px-3 py-1">{product.format}</span>
+              <span className="chip border border-card-border bg-surface px-3 py-1 text-muted">{product.format}</span>
             </div>
-            <div className="border-y border-line py-5">
+            <div className="border-y border-line py-6">
               {product.price_cents != null ? (
-                <div className="text-3xl font-semibold">
+                <div className="text-4xl font-semibold tracking-tight tabular-nums">
                   {euros(product.price_cents)} <span className="text-sm font-normal text-subtle">sin IVA</span>
                 </div>
               ) : (
@@ -62,16 +62,16 @@ export default async function ProductoPage({ params }: { params: Promise<{ slug:
                 <Link href="/entrar" className="btn-ghost h-12 px-6 text-base">Entrar</Link>
               </div>
             ) : null}
-            <ul className="space-y-3 rounded-lg bg-soft p-5 text-sm text-[#3b3e40]">
-              <li>✓ Muestra gratuita de la línea al darte de alta</li>
+            <ul className="card space-y-3 p-5 text-sm text-muted">
+              <Perk>Muestra gratuita de la línea al darte de alta</Perk>
               {pricing.tiers.map((t) => (
-                <li key={t.pct}>✓ {t.pct} % de descuento en pedidos desde {euros(t.minCents)}</li>
+                <Perk key={t.pct}>{t.pct} % de descuento en pedidos desde {euros(t.minCents)}</Perk>
               ))}
-              {pricing.freeShippingFromCents > 0 && <li>✓ Envío gratis desde {euros(pricing.freeShippingFromCents)}</li>}
+              {pricing.freeShippingFromCents > 0 && <Perk>Envío gratis desde {euros(pricing.freeShippingFromCents)}</Perk>}
             </ul>
             {product.source_url && (
-              <a href={product.source_url} target="_blank" rel="noreferrer" className="inline-block text-sm text-accent hover:underline">
-                Ficha técnica del fabricante ›
+              <a href={product.source_url} target="_blank" rel="noreferrer" className="link inline-block text-sm">
+                Ficha técnica del fabricante →
               </a>
             )}
           </div>
@@ -79,8 +79,8 @@ export default async function ProductoPage({ params }: { params: Promise<{ slug:
       </div>
       {related.length > 0 && (
         <section className="space-y-8">
-          <h2 className="text-2xl font-semibold">Más de {line?.name}</h2>
-          <div className="grid grid-cols-2 gap-x-4 gap-y-10 lg:grid-cols-4">
+          <h2 className="display text-4xl">Más de {line?.name}</h2>
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
             {related.map((p) => (
               <ProductCard key={p.id} product={p} canOrder={loggedIn} />
             ))}
@@ -88,5 +88,17 @@ export default async function ProductoPage({ params }: { params: Promise<{ slug:
         </section>
       )}
     </div>
+  );
+}
+
+function Perk({ children }: { children: React.ReactNode }) {
+  return (
+    <li className="flex items-start gap-2.5">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="mt-px shrink-0 text-accent" aria-hidden="true">
+        <circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.12" />
+        <path d="m8 12.5 2.5 2.5L16 9.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+      {children}
+    </li>
   );
 }
