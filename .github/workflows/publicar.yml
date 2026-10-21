@@ -1,0 +1,41 @@
+name: Publicar
+
+# Construye la imagen en cada cambio de main, la guarda en GitHub Container Registry (gratis)
+# y, si existe la variable AZURE_RESOURCE_GROUP, actualiza la demo en Azure Container Apps.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  imagen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/larimedical-web:${{ github.sha }},ghcr.io/${{ github.repository_owner }}/larimedical-web:latest
+
+  azure:
+    needs: imagen
+    runs-on: ubuntu-latest
+    if: ${{ vars.AZURE_RESOURCE_GROUP != '' }}
+    steps:
+      - uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Actualizar contenedor
+        run: |
+          az containerapp update -g "${{ vars.AZURE_RESOURCE_GROUP }}" -n larimedical-web --image ghcr.io/${{ github.repository_owner }}/larimedical-web:${{ github.sha }}

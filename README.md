@@ -41,6 +41,8 @@ se escriben en la consola y la página de entrar muestra el enlace de acceso.
 3. Dominio propio y cuenta de Resend para `MAIL_FROM`.
 4. Entrar en `/panel/productos` y poner los precios profesionales.
 
+Para una demo online gratuita en Azure, ver [docs/despliegue-azure.md](docs/despliegue-azure.md).
+
 ## Catálogo
 
 `data/catalogo.json` se sacó de la web pública de Larimide el 21/10/2026. Al arrancar se actualizan nombres y líneas,

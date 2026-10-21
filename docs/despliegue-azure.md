@@ -1,0 +1,38 @@
+# Demo en Azure
+
+La demo publica la APP en Azure Container Apps, igual que la demo de portal-pedidos, y está pensada para no salir del
+uso gratuito.
+
+| Pieza | Configuración | Por qué no cuesta |
+| --- | --- | --- |
+| `larimedical-web` | 0,5 vCPU, 1 GiB, de 0 a 1 réplicas, acceso público | Se apaga sin visitas y queda dentro de la cuota gratuita mensual |
+| Imagen | GitHub Container Registry | Gratis; no se usa Azure Container Registry |
+| Registros | Desactivados | Log Analytics se cobra por GB |
+| Aviso de gasto | Presupuesto de 1 € con aviso por correo | Avisa de cualquier cargo |
+
+**Importante:** en la demo la base de datos vive dentro del contenedor. Cuando la web se apaga por falta de visitas,
+las altas y pedidos de prueba se borran y los precios vuelven a los de ejemplo (`DEMO_PRICES=1`). La primera visita
+tras un rato sin uso tarda unos segundos. Para datos permanentes, añade `DATABASE_URL` con una base de Supabase
+(gratis) y quita `DEMO_PRICES`.
+
+## Pasos
+
+1. Fusionar en `main`: el workflow **Publicar** construye la imagen y la sube a `ghcr.io/lredondo90/larimedical-web`.
+2. Crear en GitHub un token con permiso `read:packages` (o reutilizar el de portal-pedidos).
+3. En [Azure Cloud Shell](https://shell.azure.com) (Bash), con el repositorio clonado:
+
+   ```bash
+   GHCR_TOKEN=<token> BUDGET_EMAIL=<tu correo> ADMIN_PASSWORD=<contraseña del panel> ./infra/azure-demo.sh
+   ```
+
+   Al terminar imprime la dirección pública.
+
+4. Opcional, para que cada cambio en `main` se publique solo: crear un service principal con
+   `az ad sp create-for-rbac --name larimedical-ci --role contributor --scopes /subscriptions/<id>/resourceGroups/larimedical-demo --sdk-auth`,
+   guardar su salida como secreto `AZURE_CREDENTIALS` y crear la variable `AZURE_RESOURCE_GROUP=larimedical-demo`.
+
+## Borrar la demo
+
+```bash
+az group delete -n larimedical-demo --yes
+```

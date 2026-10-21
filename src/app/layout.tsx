@@ -14,6 +14,11 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   return (
     <html lang="es">
       <body className="min-h-screen antialiased">
+        {process.env.DEMO_PRICES === "1" && (
+          <div className="bg-amber-100 px-4 py-1 text-center text-xs text-amber-900">
+            Demo: los precios son de ejemplo y los datos se borran cuando la web se reinicia.
+          </div>
+        )}
         <header className="border-b border-line bg-white">
           <nav className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3 text-sm">
             <Link href="/" className="mr-auto font-semibold">

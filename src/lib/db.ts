@@ -1,7 +1,7 @@
 import "server-only";
 import { mkdirSync, readFileSync } from "node:fs";
 import path from "node:path";
-import { seedCatalog } from "./seed";
+import { seedCatalog, seedDemoPrices } from "./seed";
 
 // Con DATABASE_URL usa Postgres (Supabase en producción); sin ella, una base local en .data/ (PGlite).
 type Runner = (text: string, params?: unknown[]) => Promise<Record<string, unknown>[]>;
@@ -28,6 +28,7 @@ async function connect(): Promise<Runner> {
     await run(statement);
   }
   await seedCatalog(run);
+  if (process.env.DEMO_PRICES === "1") await seedDemoPrices(run);
   return run;
 }
 

@@ -20,3 +20,14 @@ export async function seedCatalog(run: Run) {
     );
   }
 }
+
+// Solo para la demo online (DEMO_PRICES=1): precios de ejemplo en los productos que aún no tienen precio,
+// para poder probar el pedido completo. No son precios reales.
+const DEMO_PRICE_CENTS: Record<string, number> = { Muestra: 500, Sachette: 300, Monodosis: 900, Viales: 9500, Envase: 4500 };
+
+export async function seedDemoPrices(run: Run) {
+  for (const [format, cents] of Object.entries(DEMO_PRICE_CENTS)) {
+    await run("update products set price_cents = $2 where price_cents is null and format = $1", [format, cents]);
+  }
+  await run("update products set price_cents = 12000 where price_cents = 4500 and name like '%Peeling%60ml%'");
+}
