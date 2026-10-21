@@ -24,13 +24,13 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           </div>
         )}
         <header className="sticky top-0 z-20 border-b border-line bg-white/90 backdrop-blur-md">
-          <nav className="mx-auto flex h-16 max-w-6xl items-center gap-x-5 px-4 text-sm text-[#303233] sm:gap-x-7">
+          <nav className="mx-auto flex h-16 max-w-6xl items-center gap-x-4 px-4 text-sm text-[#303233] sm:gap-x-7">
             <Link href="/" className="mr-auto flex items-center gap-2.5">
               <span className="grid size-8 place-items-center rounded-full bg-foreground text-sm font-semibold text-white">
                 {brand.name.charAt(0)}
               </span>
               <span className="leading-tight">
-                <span className="block text-[15px] font-semibold text-foreground">{brand.name}</span>
+                <span className="block text-[15px] font-semibold whitespace-nowrap text-foreground">{brand.name}</span>
                 <span className="hidden text-[11px] text-subtle sm:block">Canal profesional · {company.name}</span>
               </span>
             </Link>

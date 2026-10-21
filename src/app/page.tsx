@@ -84,7 +84,7 @@ export default async function Home() {
       </section>
 
       <section className="bleed bg-footer text-white">
-        <div className="grid gap-10 py-16 text-center sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-x-4 gap-y-10 py-16 text-center lg:grid-cols-4">
           {[
             [String(products.length), "referencias profesionales"],
             [String(lineTiles.length), "líneas por indicación"],
@@ -92,7 +92,7 @@ export default async function Home() {
             ["0 €", "muestra para empezar"],
           ].map(([value, label]) => (
             <div key={label}>
-              <div className="text-5xl font-normal tracking-tight">{value}</div>
+              <div className="text-4xl font-normal tracking-tight sm:text-5xl">{value}</div>
               <div className="mt-2 text-sm text-footer-link">{label}</div>
             </div>
           ))}
