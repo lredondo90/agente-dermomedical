@@ -11,7 +11,7 @@ export function ProductCard({ product: p, lineName, canOrder }: { product: Produ
         <ProductImage src={p.image_url} alt={p.name} />
       </Link>
       <div className="flex flex-1 flex-col gap-1 pt-4">
-        <div className="flex items-center gap-2 text-xs">
+        <div className="flex min-h-4 items-center gap-2 text-xs">
           {lineName && <span className="text-subtle">{lineName}</span>}
           {p.professional && <span className="eyebrow">Uso profesional</span>}
         </div>

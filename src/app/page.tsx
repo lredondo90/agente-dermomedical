@@ -67,14 +67,14 @@ export default async function Home() {
           <h2 className="text-3xl font-semibold md:text-[2.5rem] md:leading-tight">Una línea para cada indicación</h2>
           <p className="text-muted">Peelings bioquímicos, cócteles, cremas y tratamientos domiciliarios para completar el protocolo en consulta.</p>
         </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className={`grid grid-cols-2 gap-3 sm:gap-4 ${lineTiles.length % 5 === 0 ? "lg:grid-cols-5" : "lg:grid-cols-3"}`}>
           {lineTiles.map((l) => (
             <Link key={l.id} href={`/catalogo?linea=${l.id}`} className="group flex flex-col bg-fog">
-              <div className="space-y-1 px-6 pt-6 text-center">
-                <div className="text-xs text-subtle">{l.focus}</div>
-                <div className="text-2xl font-semibold">{l.name}</div>
+              <div className="space-y-1 px-4 pt-6 text-center">
+                <div className="text-xl font-semibold">{l.name}</div>
+                <div className="line-clamp-2 min-h-8 text-xs text-subtle">{l.focus}</div>
                 <div className="text-sm text-[#1890ff]">
-                  {l.products.length} productos <span className="transition-transform group-hover:translate-x-0.5">›</span>
+                  {l.products.length} {l.products.length === 1 ? "producto" : "productos"} <span className="transition-transform group-hover:translate-x-0.5">›</span>
                 </div>
               </div>
               <ProductImage src={l.hero.image_url} alt={l.hero.name} className="mx-auto w-4/5 bg-transparent" />
